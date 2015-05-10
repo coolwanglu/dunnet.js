@@ -1,4 +1,5 @@
 /*
+
 Minimum emacs lisp interpreter for dunnet
 Copyright (c) 2015 Lu Wang <coolwanglu@gmail.com>
 
@@ -200,30 +201,30 @@ function _equal(a, b) {
   }
 }
 
-function list_for_each(l, f) {
+function list_for_each(_, l, f) {
   while(true) {
     if(is_nil(l)) return;
-    f(_car(l));
+    f(_, _car(l));
     l = _cdr(l);
   }
 }
 
 var Stack = [];
-function interpret(obj, scope) {
+function interpret(_, obj, scope) {
   assert(scope);
   if(obj instanceof Array) {
     if(is_nil(obj)) return [];
-    var f = interpret(_car(obj), scope);
+    var f = interpret(_, _car(obj), scope);
     if(is_nil(f)) throw new Error("Unknown function:" + JSON.stringify(_car(obj)));
     if(f instanceof Function) {
-      return f(_cdr(obj), scope);
+      return f(_, _cdr(obj), scope);
     } else if (f.type === 'function') {
       var func_scope = new Scope(scope);
       var cur_arg = f.args;
       var cur_value = _cdr(obj);
       while(true) {
         if(cur_arg.length > 0) {
-           func_scope.set(_car(cur_arg), interpret(_car(cur_value), scope));
+           func_scope.set(_car(cur_arg), interpret(_, _car(cur_value), scope));
            if(cur_arg.length > 1) {
              cur_arg = _cdr(cur_arg);
              cur_value = _cdr(cur_value);
@@ -232,8 +233,8 @@ function interpret(obj, scope) {
       }
       Stack.push(f.name);
       var result = [];
-      list_for_each(f.body, function(item) {
-        result = interpret(item, func_scope);
+      list_for_each(_, f.body, function(_, item) {
+        result = interpret(_, item, func_scope);
       });
       Stack.pop(-1);
       return result;
@@ -260,21 +261,21 @@ var Global = new Scope(null, {
   'emacs-version': { type: 'string', value: '22.1.1' },
   'noninteractive': 't',
 
-  '+': function(obj, scope) {
+  '+': function(_, obj, scope) {
     var r = 0;
-    list_for_each(obj, function(item) {
-      var v = interpret(item, scope);
+    list_for_each(_, obj, function(_, item) {
+      var v = interpret(_, item, scope);
       assert(typeof v === 'number');
       r += v;
     });
     return r;
   },
 
-  '-': function(obj, scope) {
+  '-': function(_, obj, scope) {
     var r = 0;
     var first = true;
-    list_for_each(obj, function(item) {
-      var v = interpret(item, scope);
+    list_for_each(_, obj, function(_, item) {
+      var v = interpret(_, item, scope);
       assert(typeof v === 'number');
       if(first) {
         first = false;
@@ -284,66 +285,66 @@ var Global = new Scope(null, {
     return r;
   },
 
-  '1+': function(obj, scope) {
-    var v = interpret(_car(obj), scope);
+  '1+': function(_, obj, scope) {
+    var v = interpret(_, _car(obj), scope);
     assert(typeof v === 'number');
     return v + 1;
   },
 
-  '<': function(obj, scope) {
-    var v1 = interpret(_car(obj), scope);
+  '<': function(_, obj, scope) {
+    var v1 = interpret(_, _car(obj), scope);
     assert(typeof v1 === 'number');
-    var v2 = interpret(_cadr(obj), scope);
+    var v2 = interpret(_, _cadr(obj), scope);
     if(!(typeof v2 === 'number')) console.log(v1, v2, obj);
     assert(typeof v2 === 'number');
     return (v1 < v2) ? 't' : [];
   },
 
-  '=': function(obj, scope) {
-    var v1 = interpret(_car(obj), scope);
+  '=': function(_, obj, scope) {
+    var v1 = interpret(_, _car(obj), scope);
     assert(typeof v1 === 'number');
-    var v2 = interpret(_cadr(obj), scope);
+    var v2 = interpret(_, _cadr(obj), scope);
     assert(typeof v2 === 'number');
     return (v1 === v2) ? 't' : [];
   },
 
-  '>': function(obj, scope) {
-    var v1 = interpret(_car(obj), scope);
+  '>': function(_, obj, scope) {
+    var v1 = interpret(_, _car(obj), scope);
     assert(typeof v1 === 'number');
-    var v2 = interpret(_cadr(obj), scope);
+    var v2 = interpret(_, _cadr(obj), scope);
     if(!(typeof v2 === 'number')) console.log(v1, v2, obj);
     assert(typeof v2 === 'number');
     return (v1 > v2) ? 't' : [];
   },
 
-  '>=': function(obj, scope) {
-    var v1 = interpret(_car(obj), scope);
+  '>=': function(_, obj, scope) {
+    var v1 = interpret(_, _car(obj), scope);
     assert(typeof v1 === 'number');
-    var v2 = interpret(_cadr(obj), scope);
+    var v2 = interpret(_, _cadr(obj), scope);
     if(!(typeof v2 === 'number')) console.log(v1, v2, obj);
     assert(typeof v2 === 'number');
     return (v1 >= v2) ? 't' : [];
   },
 
-  abs: function(obj, scope) {
-    var v = interpret(_car(obj), scope);
+  abs: function(_, obj, scope) {
+    var v = interpret(_, _car(obj), scope);
     assert(typeof v === 'number');
     return Math.abs(v);
   },
 
-  and: function(obj, scope) {
+  and: function(_, obj, scope) {
     var r = 't';
     while(true) {
       if(is_nil(obj)) return r;
-      r = interpret(_car(obj), scope);
+      r = interpret(_, _car(obj), scope);
       if(is_nil(r)) return [];
       obj = _cdr(obj);
     }
   },
 
-  append: function(obj, scope) {
-    var l1 = interpret(_car(obj), scope);
-    var l2 = interpret(_cadr(obj), scope);
+  append: function(_, obj, scope) {
+    var l1 = interpret(_, _car(obj), scope);
+    var l2 = interpret(_, _cadr(obj), scope);
 
     var l = l1;
     if(is_nil(l)) return l2;
@@ -353,27 +354,27 @@ var Global = new Scope(null, {
     return l1;
   },
 
-  aref: function(obj, scope) {
-    var a = interpret(_car(obj), scope);
+  aref: function(_, obj, scope) {
+    var a = interpret(_, _car(obj), scope);
     assert(a.type === 'vector' || a.type === 'string');
-    var i = interpret(_cadr(obj), scope);
+    var i = interpret(_, _cadr(obj), scope);
     assert(typeof i === 'number');
     return a.value[i];
   },
   
-  aset: function(obj, scope) {
-    var a = interpret(_car(obj), scope);
+  aset: function(_, obj, scope) {
+    var a = interpret(_, _car(obj), scope);
     assert(a.type === 'vector');
-    var i = interpret(_cadr(obj), scope);
+    var i = interpret(_, _cadr(obj), scope);
     assert(typeof i === 'number');
-    var v = interpret(_cadr(_cdr(obj)), scope);
+    var v = interpret(_, _cadr(_cdr(obj)), scope);
     a.value[i] = v;
     return v;
   },
 
-  assq: function(obj, scope) {
-   var k = interpret(_car(obj), scope);
-   var l = interpret(_cadr(obj), scope);
+  assq: function(_, obj, scope) {
+   var k = interpret(_, _car(obj), scope);
+   var l = interpret(_, _cadr(obj), scope);
 
    assert(l instanceof Array);
    while(true) {
@@ -383,25 +384,25 @@ var Global = new Scope(null, {
    }
   },
 
-  car: function(obj, scope) {
-    var l = interpret(_car(obj), scope);
+  car: function(_, obj, scope) {
+    var l = interpret(_, _car(obj), scope);
     return _car(l);
   },
 
-  cadr: function(obj, scope) {
-    var l = interpret(_car(obj), scope);
+  cadr: function(_, obj, scope) {
+    var l = interpret(_, _car(obj), scope);
     return _car(_cdr(l));
   },
 
-  cdr: function(obj, scope) {
-    var l = interpret(_car(obj), scope);
+  cdr: function(_, obj, scope) {
+    var l = interpret(_, _car(obj), scope);
     return _cdr(l);
   },
 
-  concat: function(obj, scope) {
-    var v1 = interpret(_car(obj), scope);
+  concat: function(_, obj, scope) {
+    var v1 = interpret(_, _car(obj), scope);
     assert(v1.type === 'string');
-    var v2 = interpret(_cadr(obj), scope);
+    var v2 = interpret(_, _cadr(obj), scope);
     assert(v2.type === 'string');
     return {
       type: 'string',
@@ -409,26 +410,26 @@ var Global = new Scope(null, {
     };
   },
 
-  debug: function(obj, scope) {
-    console.log(interpret(_car(obj), scope));
+  debug: function(_, obj, scope) {
+    console.log(interpret(_, _car(obj), scope));
   },
 
-  defconst: function(obj, scope) {
+  defconst: function(_, obj, scope) {
     var sym = _car(obj);
-    Global.set(sym, interpret(_cadr(obj), scope));
+    Global.set(sym, interpret(_, _cadr(obj), scope));
     return sym;
   },
       
-  defcustom: function() { return []; },
+  defcustom: function(_) { return []; },
 
-  'define-key': function(obj, scope) {
-    var km = interpret(_car(obj), scope);
+  'define-key': function(_, obj, scope) {
+    var km = interpret(_, _car(obj), scope);
     assert(_car(km) === 'keymap');
 
-    var key = interpret(_cadr(obj), scope);
+    var key = interpret(_, _cadr(obj), scope);
     assert(key.type === 'string');
     key = key.value.charCodeAt(0);
-    var def = interpret(_cadr(_cdr(obj)), scope);
+    var def = interpret(_, _cadr(_cdr(obj)), scope);
 
     if(_cadr(km) instanceof Array) { // sparse
       var l = km;
@@ -451,9 +452,9 @@ var Global = new Scope(null, {
     return def;
   },
 
-  defgroup: function() { return []; },
+  defgroup: function(_) { return []; },
 
-  defun: function(obj, scope) {
+  defun: function(_, obj, scope) {
     var name = _car(obj);
     var func = {
       name: name,
@@ -465,31 +466,31 @@ var Global = new Scope(null, {
     return func;
   },
 
-  defvar: function(obj, scope) {
+  defvar: function(_, obj, scope) {
     var sym = _car(obj);
-    Global.set(sym, interpret(_cadr(obj), scope));
+    Global.set(sym, interpret(_, _cadr(obj), scope));
     return sym;
   },
 
-  dolist: function(obj, scope) {
+  dolist: function(_, obj, scope) {
     var arg = _car(obj);
     assert(arg instanceof Array);
     var v = _car(arg);
     assert(typeof v === 'string');
-    var list = interpret(_cadr(arg), scope);
+    var list = interpret(_, _cadr(arg), scope);
     assert(list instanceof Array);
     var s = new Scope(scope);
-    list_for_each(list, function(item) {
+    list_for_each(_, list, function(_, item) {
       s.set(v, item);
-      list_for_each(_cdr(obj), function(item) {
-        interpret(item, s);
+      list_for_each(_, _cdr(obj), function(_, item) {
+        interpret(_, item, s);
       });
     });
     return s.get(_cadr(_cdr(arg)));
   },
 
-  downcase: function(obj, scope) {
-    var v = interpret(_car(obj), scope);
+  downcase: function(_, obj, scope) {
+    var v = interpret(_, _car(obj), scope);
     assert(typeof v === 'number' || v.type === 'string');
     if(v.type === 'string') {
       return {
@@ -501,22 +502,22 @@ var Global = new Scope(null, {
     }
   },
 
-  eq: function(obj, scope) {
-    var v1 = interpret(_car(obj), scope);
-    var v2 = interpret(_cadr(obj), scope);
+  eq: function(_, obj, scope) {
+    var v1 = interpret(_, _car(obj), scope);
+    var v2 = interpret(_, _cadr(obj), scope);
     return _eq(v1, v2);
   },
 
-  eval: function(obj, scope) {
-    return interpret(interpret(_car(obj), scope), scope);
+  eval: function(_, obj, scope) {
+    return interpret(_, interpret(_, _car(obj), scope), scope);
   },
 
-  'eval-when-compile': function() { return []; },
+  'eval-when-compile': function(_) { return []; },
 
-  fset: function(obj, scope) {
-    var fn = interpret(_car(obj), scope);
+  fset: function(_, obj, scope) {
+    var fn = interpret(_, _car(obj), scope);
     assert(typeof fn === 'string');
-    var fn2 = interpret(_cadr(obj), scope);
+    var fn2 = interpret(_, _cadr(obj), scope);
     assert(typeof fn2 === 'string');
 
     var s = scope.get_containing_scope(fn) || Global;
@@ -524,53 +525,53 @@ var Global = new Scope(null, {
     return fn2;
   },
 
-  if: function(obj, scope) {
-    if(is_nil(interpret(_car(obj), scope))) {
+  if: function(_, obj, scope) {
+    if(is_nil(interpret(_, _car(obj), scope))) {
       var r = [];
-      list_for_each(_cddr(obj), function(item) {
-        r = interpret(item, scope);
+      list_for_each(_, _cddr(obj), function(_, item) {
+        r = interpret(_, item, scope);
       });
       return r;
     } else {
-      return interpret(_cadr(obj), scope);
+      return interpret(_, _cadr(obj), scope);
     }
   },
 
-  intern: function(obj, scope) {
-    var s = interpret(_car(obj), scope);
+  intern: function(_, obj, scope) {
+    var s = interpret(_, _car(obj), scope);
     if(s.type !== 'string') console.log(s);
     assert(s.type === 'string');
     return s.value;
   },
 
-  let: function(obj, scope) {
+  let: function(_, obj, scope) {
     var let_scope = new Scope(scope);
-    list_for_each(_car(obj), function(item) {
+    list_for_each(_, _car(obj), function(_, item) {
       if(typeof item === 'string') let_scope.set(item, []);
-      else let_scope.set(_car(item), interpret(_cadr(item), let_scope));
+      else let_scope.set(_car(item), interpret(_, _cadr(item), let_scope));
     });
     var r = [];
-    list_for_each(_cdr(obj), function(item) {
-      r = interpret(item, let_scope);
+    list_for_each(_, _cdr(obj), function(_, item) {
+      r = interpret(_, item, let_scope);
     });
     return r;
   },
 
-  list: function(obj, scope) {
+  list: function(_, obj, scope) {
     var result = [];
     var l = result;
-    list_for_each(obj, function(item) {
-      l.push(interpret(item, scope), []);
+    list_for_each(_, obj, function(_, item) {
+      l.push(interpret(_, item, scope), []);
       l = l[1];
     });
     return result;
   },
 
-  'make-sparse-keymap': function(obj, scope) {
+  'make-sparse-keymap': function(_, obj, scope) {
     return ["keymap", []];
   },
 
-  'make-keymap': function(obj, scope) {
+  'make-keymap': function(_, obj, scope) {
     var km = [];
     for(var i = 0; i < 256; ++i)
       km.push([]);
@@ -580,11 +581,11 @@ var Global = new Scope(null, {
     }, []]];
   },
 
-  'make-vector': function(obj, scope) {
+  'make-vector': function(_, obj, scope) {
     var r = [];
-    var len = interpret(_car(obj), scope);
+    var len = interpret(_, _car(obj), scope);
     assert(typeof len === 'number');
-    var o = interpret(_cadr(obj), scope);
+    var o = interpret(_, _cadr(obj), scope);
     for(var i = 0; i < len; ++i)
       r.push(o);
     return {
@@ -593,9 +594,9 @@ var Global = new Scope(null, {
     }
   },
 
-  member: function(obj, scope) {
-    var e = interpret(_car(obj), scope);
-    var l = interpret(_cadr(obj), scope);
+  member: function(_, obj, scope) {
+    var e = interpret(_, _car(obj), scope);
+    var l = interpret(_, _cadr(obj), scope);
     assert(l instanceof Array);
     while(true) {
       if(is_nil(l)) return [];
@@ -604,14 +605,14 @@ var Global = new Scope(null, {
     }
   },
 
-  not: function(obj, scope) {
-    return (is_nil(interpret(_car(obj), scope)) ? 't' : []);
+  not: function(_, obj, scope) {
+    return (is_nil(interpret(_, _car(obj), scope)) ? 't' : []);
   },
 
-  nth: function(obj, scope) {
-    var n = interpret(_car(obj), scope);
+  nth: function(_, obj, scope) {
+    var n = interpret(_, _car(obj), scope);
     assert(typeof n === 'number');
-    var l = interpret(_cadr(obj), scope);
+    var l = interpret(_, _cadr(obj), scope);
     assert(l instanceof Array);
     for(var i = 0; i < n; ++i) {
       if(is_nil(l)) return [];
@@ -620,10 +621,10 @@ var Global = new Scope(null, {
     return _car(l);
   },
 
-  nthcdr: function(obj, scope) {
-    var n = interpret(_car(obj), scope);
+  nthcdr: function(_, obj, scope) {
+    var n = interpret(_, _car(obj), scope);
     assert(typeof n === 'number');
-    var l = interpret(_cadr(obj), scope);
+    var l = interpret(_, _cadr(obj), scope);
     assert(l instanceof Array);
     for(var i = 0; i < n; ++i) {
       if(is_nil(l)) return [];
@@ -632,17 +633,17 @@ var Global = new Scope(null, {
     return l;
   },
 
-  or: function(obj, scope) {
+  or: function(_, obj, scope) {
     while(true) {
       if(is_nil(obj)) return [];
-      var r = interpret(_car(obj), scope);
+      var r = interpret(_, _car(obj), scope);
       if(!is_nil(r)) return r;
       obj = _cdr(obj);
     }
   },
 
-  'prin1-to-string': function(obj, scope) {
-    var v = interpret(_car(obj), scope);
+  'prin1-to-string': function(_, obj, scope) {
+    var v = interpret(_, _car(obj), scope);
     if(typeof v === 'string') {
     } else if (typeof v === 'number') {
       v = v.toString();
@@ -653,92 +654,91 @@ var Global = new Scope(null, {
     };
   },
 
-  progn: function(obj, scope) {
+  progn: function(_, obj, scope) {
     var r = [];
-    list_for_each(obj, function(item){ 
-      r = interpret(item, scope); 
+    list_for_each(_, obj, function(_, item){ 
+      r = interpret(_, item, scope); 
     });
     return r;
   },
 
-  quote: function(obj, scope) {
+  quote: function(_, obj, scope) {
     return {
       type: 'quote',
       value: obj
     };
   },
 
-  random: function(obj, scope) {
-    var n = interpret(_car(obj), scope);
+  random: function(_, obj, scope) {
+    var n = interpret(_, _car(obj), scope);
     assert(is_nil(n) || n === 't' || typeof n === 'number');
     var N = (typeof n === 'number') ? n : (1 << 31);
     return Math.floor(Math.random() * N);
   },
 
-  'read-from-minibuffer': function(obj, scope) {
-    var prmpt = interpret(_car(obj), scope);
+  'read-from-minibuffer': function(_, obj, scope) {
+    var prmpt = interpret(_, _car(obj), scope);
     assert(prmpt.type === 'string');
     assert(prmpt.value === '');
-    var init = interpret(_cadr(obj), scope);
+    var init = interpret(_, _cadr(obj), scope);
     assert(is_nil(init));
-    var keymap = interpret(_car(_cddr(obj)), scope);      
+    var keymap = interpret(_, _car(_cddr(obj)), scope);      
     assert(keymap[0] == 'keymap');
-    var s = window.prompt('') || '';
-    return { type: 'string', value: s };
+    return READLINE(_);
   },
 
-  rplaca: function(obj, scope) {
-    var l = interpret(_car(obj), scope);
+  rplaca: function(_, obj, scope) {
+    var l = interpret(_, _car(obj), scope);
     assert(l instanceof Array);
-    var newcar = interpret(_cadr(obj), scope);
+    var newcar = interpret(_, _cadr(obj), scope);
     l[0] = newcar;
     return newcar;
   },
 
-  'send-string-to-terminal': function(obj, scope) {
-    var s = interpret(_car(obj), scope);
+  'send-string-to-terminal': function(_, obj, scope) {
+    var s = interpret(_, _car(obj), scope);
     assert(s.type === 'string');
     document.getElementById('terminal').textContent += s.value;
   },
 
-  setq: function(obj, scope) {
+  setq: function(_, obj, scope) {
     var sym = _car(obj);
     var s = scope.get_containing_scope(sym) || Global;
-    var r = interpret(_cadr(obj), scope);
+    var r = interpret(_, _cadr(obj), scope);
     s.set(sym, r);
     return r;
   },
 
-  'string-match': function(obj, scope) {
-    var regexp = interpret(_car(obj), scope);
+  'string-match': function(_, obj, scope) {
+    var regexp = interpret(_, _car(obj), scope);
     assert(regexp.type === 'string');
-    var s = interpret(_cadr(obj), scope);
+    var s = interpret(_, _cadr(obj), scope);
     assert(s.type === 'string');
     var idx = s.value.search(new RegExp(regexp.value));
     return (idx === -1) ? [] : idx;
   },
 
-  'string=': function(obj, scope) {
-    var v1 = interpret(_car(obj), scope);
+  'string=': function(_, obj, scope) {
+    var v1 = interpret(_, _car(obj), scope);
     assert((typeof v1 === 'string') || (v1.type === 'string'));
     if(v1.type === 'string') v1 = v1.value;
-    var v2 = interpret(_cadr(obj), scope);
+    var v2 = interpret(_, _cadr(obj), scope);
     assert((typeof v2 === 'string') || (v2.type === 'string'));
     if(v2.type === 'string') v2 = v2.value;
     return (v1 === v2) ? 't' : [];
   },
 
-  stringp: function(obj, scope) {
-    var s = interpret(_car(obj), scope);
+  stringp: function(_, obj, scope) {
+    var s = interpret(_, _car(obj), scope);
     return (s.type === 'string') ? 't' : [];
   },
 
-  substring: function(obj, scope) {
-    var v1 = interpret(_car(obj), scope);
+  substring: function(_, obj, scope) {
+    var v1 = interpret(_, _car(obj), scope);
     assert(v1.type === 'string');
-    var v2 = interpret(_cadr(obj), scope);
+    var v2 = interpret(_, _cadr(obj), scope);
     assert(typeof v2 === 'number');
-    var v3 = interpret(_cadr(_cdr(obj)), scope);
+    var v3 = interpret(_, _cadr(_cdr(obj)), scope);
     assert(is_nil(v3) || typeof v3 === 'number');
     if(is_nil(v3)) v3 = v1.value.length;
     return {
@@ -747,11 +747,11 @@ var Global = new Scope(null, {
     };
   },
 
-  unless: function(obj, scope) {
-    if(is_nil(interpret(_car(obj), scope))) {
+  unless: function(_, obj, scope) {
+    if(is_nil(interpret(_, _car(obj), scope))) {
       var r = [];
-      list_for_each(_cdr(obj), function(item){ 
-        r = interpret(item, scope); 
+      list_for_each(_, _cdr(obj), function(_, item){ 
+        r = interpret(_, item, scope); 
       });
       return r;
     } else {
@@ -759,8 +759,8 @@ var Global = new Scope(null, {
     }
   },
 
-  upcase: function(obj, scope) {
-    var v = interpret(_car(obj), scope);
+  upcase: function(_, obj, scope) {
+    var v = interpret(_, _car(obj), scope);
     assert(typeof v === 'number' || v.type === 'string');
     if(v.type === 'string') {
       return {
@@ -772,11 +772,11 @@ var Global = new Scope(null, {
     }
   },
 
-  while: function(obj, scope) {
+  while: function(_, obj, scope) {
     var r  = [];
-    while(!is_nil(interpret(_car(obj), scope))) {
-      list_for_each(_cdr(obj), function(item) {
-        r = interpret(item, scope);
+    while(!is_nil(interpret(_, _car(obj), scope))) {
+      list_for_each(_, _cdr(obj), function(_, item) {
+        r = interpret(_, item, scope);
       });
     }
     return r;
@@ -785,11 +785,33 @@ var Global = new Scope(null, {
 
 Global.set([], []);
 
+function READLINE(callback) {
+  READLINE_CALLBACK = function(s) {
+    callback(null, { type: 'string', value: s });
+  };
+};
+var READLINE_CALLBACK = null;
+
 document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('input').addEventListener('keyup', function(e) {
+    if(e.keyCode != 13) return;
+    if(!READLINE_CALLBACK) return;
+    var s = e.target.value;
+    e.target.value = '';
+    e.preventDefault();
+    var cb = READLINE_CALLBACK;
+    READLINE_CALLBACK = null;
+    cb(s);
+  });
+
+  function onexit () {
+    console.log('game over');
+  }
+
   var xhr = new XMLHttpRequest();
   xhr.onload = function() {
     try {
-      interpret(new Parser(this.responseText).tokenize(), Global);
+      interpret(onexit, new Parser(this.responseText).tokenize(), Global);
     } catch (e) {
       console.log(Stack);
       throw e;
