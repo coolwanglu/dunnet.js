@@ -1,5 +1,4 @@
 /*
-
 Minimum emacs lisp interpreter for dunnet
 Copyright (c) 2015 Lu Wang <coolwanglu@gmail.com>
 
@@ -26,6 +25,8 @@ THE SOFTWARE.
 function assert(condition) {
   if(!condition) throw new Error('assertion failed');
 }
+
+function InterpreterError(message) { this.message = message; }
 
 function Parser (str) {
   this.s = 'progn\n' + str + '\n)';
@@ -217,7 +218,10 @@ function interpret(_, obj, scope) {
     var f = interpret(_, _car(obj), scope);
     if(is_nil(f)) throw new Error("Unknown function:" + JSON.stringify(_car(obj)));
     if(f instanceof Function) {
-      return f(_, _cdr(obj), scope);
+      Stack.push(f.name);
+      var r = f(_, _cdr(obj), scope);
+      Stack.pop(-1);
+      return r;
     } else if (f.type === 'function') {
       var func_scope = new Scope(scope);
       var cur_arg = f.args;
@@ -254,6 +258,32 @@ function interpret(_, obj, scope) {
   }
 }
 
+var READLINE_CALLBACK = null;
+function _readline(callback) {
+  READLINE_CALLBACK = function(s) {
+    callback(null, { type: 'string', value: s });
+  };
+  document.getElementById('input').focus();
+  document.getElementById('input').addEventListener('blur', function(e) {
+    e.target.focus();
+  });
+};
+
+function _readfile(filename) {
+  if(typeof localStorage !== 'undefined') {
+    var data = localStorage['DUNNET-JS-FILE-'+filename];
+    if(typeof data !== 'undefined') {
+      return data;
+    }
+  }
+  throw new InterpreterError("Cannot find file: " + filename);
+};
+
+var _default_buffer_name = '*scratch*';
+var _cur_buffer = { type:'buffer', value: '', name: _default_buffer_name };
+var Buffers = {};
+Buffers[_default_buffer_name] = _cur_buffer;
+
 var Global = new Scope(null, {
   nil: [],
   t: 't',
@@ -261,7 +291,7 @@ var Global = new Scope(null, {
   'emacs-version': { type: 'string', value: '22.1.1' },
   'noninteractive': 't',
 
-  '+': function(_, obj, scope) {
+  '+': function PLUS(_, obj, scope) {
     var r = 0;
     list_for_each(_, obj, function(_, item) {
       var v = interpret(_, item, scope);
@@ -271,7 +301,7 @@ var Global = new Scope(null, {
     return r;
   },
 
-  '-': function(_, obj, scope) {
+  '-': function MINUS(_, obj, scope) {
     var r = 0;
     var first = true;
     list_for_each(_, obj, function(_, item) {
@@ -285,13 +315,13 @@ var Global = new Scope(null, {
     return r;
   },
 
-  '1+': function(_, obj, scope) {
+  '1+': function ONEPLUS(_, obj, scope) {
     var v = interpret(_, _car(obj), scope);
     assert(typeof v === 'number');
     return v + 1;
   },
 
-  '<': function(_, obj, scope) {
+  '<': function LESS_THAN(_, obj, scope) {
     var v1 = interpret(_, _car(obj), scope);
     assert(typeof v1 === 'number');
     var v2 = interpret(_, _cadr(obj), scope);
@@ -300,7 +330,7 @@ var Global = new Scope(null, {
     return (v1 < v2) ? 't' : [];
   },
 
-  '=': function(_, obj, scope) {
+  '=': function EQUAL(_, obj, scope) {
     var v1 = interpret(_, _car(obj), scope);
     assert(typeof v1 === 'number');
     var v2 = interpret(_, _cadr(obj), scope);
@@ -308,7 +338,7 @@ var Global = new Scope(null, {
     return (v1 === v2) ? 't' : [];
   },
 
-  '>': function(_, obj, scope) {
+  '>': function GREATER_THAN(_, obj, scope) {
     var v1 = interpret(_, _car(obj), scope);
     assert(typeof v1 === 'number');
     var v2 = interpret(_, _cadr(obj), scope);
@@ -317,7 +347,7 @@ var Global = new Scope(null, {
     return (v1 > v2) ? 't' : [];
   },
 
-  '>=': function(_, obj, scope) {
+  '>=': function GREATER_THAN_OR_EQUAL_TO(_, obj, scope) {
     var v1 = interpret(_, _car(obj), scope);
     assert(typeof v1 === 'number');
     var v2 = interpret(_, _cadr(obj), scope);
@@ -326,13 +356,13 @@ var Global = new Scope(null, {
     return (v1 >= v2) ? 't' : [];
   },
 
-  abs: function(_, obj, scope) {
+  abs: function abs(_, obj, scope) {
     var v = interpret(_, _car(obj), scope);
     assert(typeof v === 'number');
     return Math.abs(v);
   },
 
-  and: function(_, obj, scope) {
+  and: function and(_, obj, scope) {
     var r = 't';
     while(true) {
       if(is_nil(obj)) return r;
@@ -342,7 +372,7 @@ var Global = new Scope(null, {
     }
   },
 
-  append: function(_, obj, scope) {
+  append: function append(_, obj, scope) {
     var l1 = interpret(_, _car(obj), scope);
     var l2 = interpret(_, _cadr(obj), scope);
 
@@ -354,7 +384,7 @@ var Global = new Scope(null, {
     return l1;
   },
 
-  aref: function(_, obj, scope) {
+  aref: function aref(_, obj, scope) {
     var a = interpret(_, _car(obj), scope);
     assert(a.type === 'vector' || a.type === 'string');
     var i = interpret(_, _cadr(obj), scope);
@@ -362,7 +392,7 @@ var Global = new Scope(null, {
     return a.value[i];
   },
   
-  aset: function(_, obj, scope) {
+  aset: function aset(_, obj, scope) {
     var a = interpret(_, _car(obj), scope);
     assert(a.type === 'vector');
     var i = interpret(_, _cadr(obj), scope);
@@ -372,7 +402,7 @@ var Global = new Scope(null, {
     return v;
   },
 
-  assq: function(_, obj, scope) {
+  assq: function assq(_, obj, scope) {
    var k = interpret(_, _car(obj), scope);
    var l = interpret(_, _cadr(obj), scope);
 
@@ -384,45 +414,70 @@ var Global = new Scope(null, {
    }
   },
 
-  car: function(_, obj, scope) {
+  car: function car(_, obj, scope) {
     var l = interpret(_, _car(obj), scope);
     return _car(l);
   },
 
-  cadr: function(_, obj, scope) {
+  cadr: function cadr(_, obj, scope) {
     var l = interpret(_, _car(obj), scope);
     return _car(_cdr(l));
   },
 
-  cdr: function(_, obj, scope) {
+  cdr: function cdr(_, obj, scope) {
     var l = interpret(_, _car(obj), scope);
     return _cdr(l);
   },
 
-  concat: function(_, obj, scope) {
-    var v1 = interpret(_, _car(obj), scope);
-    assert(v1.type === 'string');
-    var v2 = interpret(_, _cadr(obj), scope);
-    assert(v2.type === 'string');
+  concat: function concat(_, obj, scope) {
+    var r = [];
+    list_for_each(_, obj, function(_, item) {
+      var v = interpret(_, item, scope);
+      assert(v.type === 'string');
+      r.push(v.value);
+    });
     return {
       type: 'string',
-      value: v1.value + v2.value
+      value: r.join('')
     };
   },
 
-  debug: function(_, obj, scope) {
-    console.log(interpret(_, _car(obj), scope));
+  'condition-case': function condition_case(_, obj, scope) {
+    assert(is_nil(interpret(_, _car(obj), scope)));
+    assert(_caar(_cddr(obj)) == 'error');
+    var r;
+    try{
+      r = interpret(_, _cadr(obj), scope);
+    } catch (ex) {
+      if(ex instanceof InterpreterError) {
+        console.log(ex.message);
+        r = interpret(_, _cadr(_car(_cddr(obj))), scope);
+      } else throw ex;
+    }
+    return r;
   },
 
-  defconst: function(_, obj, scope) {
+  'current-buffer': function current_buffer(_, obj, scope) {
+    return _cur_buffer;
+  },
+
+  DEBUG: function DEBUG(_, obj, scope) {
+    console.log('DEBUG', interpret(_, _car(obj), scope));
+  },
+
+  defconst: function defconst(_, obj, scope) {
     var sym = _car(obj);
     Global.set(sym, interpret(_, _cadr(obj), scope));
     return sym;
   },
       
-  defcustom: function(_) { return []; },
+  defcustom: function defcustom(_, obj, scope) { 
+    var sym = _car(obj);
+    Global.set(sym, interpret(_, _cadr(obj), scope));
+    return sym;
+  },
 
-  'define-key': function(_, obj, scope) {
+  'define-key': function define_key(_, obj, scope) {
     var km = interpret(_, _car(obj), scope);
     assert(_car(km) === 'keymap');
 
@@ -452,9 +507,9 @@ var Global = new Scope(null, {
     return def;
   },
 
-  defgroup: function(_) { return []; },
+  defgroup: function defgroup(_) { return []; },
 
-  defun: function(_, obj, scope) {
+  defun: function defun(_, obj, scope) {
     var name = _car(obj);
     var func = {
       name: name,
@@ -466,13 +521,13 @@ var Global = new Scope(null, {
     return func;
   },
 
-  defvar: function(_, obj, scope) {
+  defvar: function defvar(_, obj, scope) {
     var sym = _car(obj);
     Global.set(sym, interpret(_, _cadr(obj), scope));
     return sym;
   },
 
-  dolist: function(_, obj, scope) {
+  dolist: function dolist(_, obj, scope) {
     var arg = _car(obj);
     assert(arg instanceof Array);
     var v = _car(arg);
@@ -489,7 +544,7 @@ var Global = new Scope(null, {
     return s.get(_cadr(_cdr(arg)));
   },
 
-  downcase: function(_, obj, scope) {
+  downcase: function downcase(_, obj, scope) {
     var v = interpret(_, _car(obj), scope);
     assert(typeof v === 'number' || v.type === 'string');
     if(v.type === 'string') {
@@ -502,19 +557,24 @@ var Global = new Scope(null, {
     }
   },
 
-  eq: function(_, obj, scope) {
+  eq: function eq(_, obj, scope) {
     var v1 = interpret(_, _car(obj), scope);
     var v2 = interpret(_, _cadr(obj), scope);
     return _eq(v1, v2);
   },
 
-  eval: function(_, obj, scope) {
+  'erase-buffer': function erase_buffer(_, obj, scope) {
+    _cur_buffer.value = '';
+    return [];
+  },
+
+  eval: function eval(_, obj, scope) {
     return interpret(_, interpret(_, _car(obj), scope), scope);
   },
 
-  'eval-when-compile': function(_) { return []; },
+  'eval-when-compile': function eval_when_compile(_) { return []; },
 
-  fset: function(_, obj, scope) {
+  fset: function fset(_, obj, scope) {
     var fn = interpret(_, _car(obj), scope);
     assert(typeof fn === 'string');
     var fn2 = interpret(_, _cadr(obj), scope);
@@ -525,7 +585,17 @@ var Global = new Scope(null, {
     return fn2;
   },
 
-  if: function(_, obj, scope) {
+  'get-buffer-create': function get_buffer_create(_, obj, scope) {
+    var s = interpret(_, _car(obj), scope);
+    assert(s.type === 'string');
+    s = s.value;
+    if(!(s in Buffers)) {
+      Buffers[s] = { type: 'buffer', value: '', name:s };
+    } 
+    return Buffers[s];
+  },
+
+  if: function IF(_, obj, scope) {
     if(is_nil(interpret(_, _car(obj), scope))) {
       var r = [];
       list_for_each(_, _cddr(obj), function(_, item) {
@@ -537,14 +607,35 @@ var Global = new Scope(null, {
     }
   },
 
-  intern: function(_, obj, scope) {
+  'insert-file-contents': function insert_file_contents(_, obj, scope) {
+    var fn = interpret(_, _car(obj), scope);
+    assert(fn.type === 'string');
+    var data = _readfile(fn.value);
+    _cur_buffer.value += data;
+    return [{ type: 'string', value: fn }, [data.length, []]];
+  },
+
+  intern: function intern(_, obj, scope) {
     var s = interpret(_, _car(obj), scope);
     if(s.type !== 'string') console.log(s);
     assert(s.type === 'string');
     return s.value;
   },
 
-  let: function(_, obj, scope) {
+  'kill-buffer': function kill_buffer(_, obj, scope) {
+    var b = interpret(_, _car(obj), scope);
+    assert(b.type === 'buffer');
+    var r = [];
+    if(b.name in Buffers) {
+      if(b.name == _default_buffer_name) Buffers[_default_buffer_name].value = '';
+      else delete Buffers[b.name];
+      r = 't';
+      if(b.name === _cur_buffer.name) _cur_buffer = Buffers[_default_buffer_name];
+    }
+    return r;
+  },
+
+  let: function LET(_, obj, scope) {
     var let_scope = new Scope(scope);
     list_for_each(_, _car(obj), function(_, item) {
       if(typeof item === 'string') let_scope.set(item, []);
@@ -557,7 +648,7 @@ var Global = new Scope(null, {
     return r;
   },
 
-  list: function(_, obj, scope) {
+  list: function list(_, obj, scope) {
     var result = [];
     var l = result;
     list_for_each(_, obj, function(_, item) {
@@ -567,11 +658,11 @@ var Global = new Scope(null, {
     return result;
   },
 
-  'make-sparse-keymap': function(_, obj, scope) {
+  'make-sparse-keymap': function make_sparse_keymap(_, obj, scope) {
     return ["keymap", []];
   },
 
-  'make-keymap': function(_, obj, scope) {
+  'make-keymap': function make_keymap(_, obj, scope) {
     var km = [];
     for(var i = 0; i < 256; ++i)
       km.push([]);
@@ -581,7 +672,7 @@ var Global = new Scope(null, {
     }, []]];
   },
 
-  'make-vector': function(_, obj, scope) {
+  'make-vector': function make_vector(_, obj, scope) {
     var r = [];
     var len = interpret(_, _car(obj), scope);
     assert(typeof len === 'number');
@@ -594,7 +685,7 @@ var Global = new Scope(null, {
     }
   },
 
-  member: function(_, obj, scope) {
+  member: function member(_, obj, scope) {
     var e = interpret(_, _car(obj), scope);
     var l = interpret(_, _cadr(obj), scope);
     assert(l instanceof Array);
@@ -605,11 +696,11 @@ var Global = new Scope(null, {
     }
   },
 
-  not: function(_, obj, scope) {
+  not: function not(_, obj, scope) {
     return (is_nil(interpret(_, _car(obj), scope)) ? 't' : []);
   },
 
-  nth: function(_, obj, scope) {
+  nth: function nth(_, obj, scope) {
     var n = interpret(_, _car(obj), scope);
     assert(typeof n === 'number');
     var l = interpret(_, _cadr(obj), scope);
@@ -621,7 +712,7 @@ var Global = new Scope(null, {
     return _car(l);
   },
 
-  nthcdr: function(_, obj, scope) {
+  nthcdr: function nthcdr(_, obj, scope) {
     var n = interpret(_, _car(obj), scope);
     assert(typeof n === 'number');
     var l = interpret(_, _cadr(obj), scope);
@@ -633,7 +724,7 @@ var Global = new Scope(null, {
     return l;
   },
 
-  or: function(_, obj, scope) {
+  or: function or(_, obj, scope) {
     while(true) {
       if(is_nil(obj)) return [];
       var r = interpret(_, _car(obj), scope);
@@ -642,7 +733,7 @@ var Global = new Scope(null, {
     }
   },
 
-  'prin1-to-string': function(_, obj, scope) {
+  'prin1-to-string': function prin1_to_string(_, obj, scope) {
     var v = interpret(_, _car(obj), scope);
     if(typeof v === 'string') {
     } else if (typeof v === 'number') {
@@ -654,7 +745,7 @@ var Global = new Scope(null, {
     };
   },
 
-  progn: function(_, obj, scope) {
+  progn: function progn(_, obj, scope) {
     var r = [];
     list_for_each(_, obj, function(_, item){ 
       r = interpret(_, item, scope); 
@@ -662,21 +753,23 @@ var Global = new Scope(null, {
     return r;
   },
 
-  quote: function(_, obj, scope) {
+  provide: function provide(_) { return []; },
+
+  quote: function quote(_, obj, scope) {
     return {
       type: 'quote',
       value: obj
     };
   },
 
-  random: function(_, obj, scope) {
+  random: function random(_, obj, scope) {
     var n = interpret(_, _car(obj), scope);
     assert(is_nil(n) || n === 't' || typeof n === 'number');
     var N = (typeof n === 'number') ? n : (1 << 31);
     return Math.floor(Math.random() * N);
   },
 
-  'read-from-minibuffer': function(_, obj, scope) {
+  'read-from-minibuffer': function read_from_minibuffer(_, obj, scope) {
     var prmpt = interpret(_, _car(obj), scope);
     assert(prmpt.type === 'string');
     assert(prmpt.value === '');
@@ -684,10 +777,10 @@ var Global = new Scope(null, {
     assert(is_nil(init));
     var keymap = interpret(_, _car(_cddr(obj)), scope);      
     assert(keymap[0] == 'keymap');
-    return READLINE(_);
+    return _readline(_);
   },
 
-  rplaca: function(_, obj, scope) {
+  rplaca: function rplaca(_, obj, scope) {
     var l = interpret(_, _car(obj), scope);
     assert(l instanceof Array);
     var newcar = interpret(_, _cadr(obj), scope);
@@ -695,13 +788,22 @@ var Global = new Scope(null, {
     return newcar;
   },
 
-  'send-string-to-terminal': function(_, obj, scope) {
+  'send-string-to-terminal': function send_string_to_terminal(_, obj, scope) {
     var s = interpret(_, _car(obj), scope);
     assert(s.type === 'string');
-    document.getElementById('terminal').textContent += s.value;
+    var lines = s.value.split('\n');
+
+    var terminal = document.getElementById('terminal');
+    var input = document.getElementById('input');
+    var first = true;
+    lines.forEach(function(line) {
+      if(first) first = false;
+      else terminal.insertBefore(document.createElement('br'), input);
+      terminal.insertBefore(document.createTextNode(line), input);
+    });
   },
 
-  setq: function(_, obj, scope) {
+  setq: function setq(_, obj, scope) {
     var sym = _car(obj);
     var s = scope.get_containing_scope(sym) || Global;
     var r = interpret(_, _cadr(obj), scope);
@@ -709,7 +811,7 @@ var Global = new Scope(null, {
     return r;
   },
 
-  'string-match': function(_, obj, scope) {
+  'string-match': function string_match(_, obj, scope) {
     var regexp = interpret(_, _car(obj), scope);
     assert(regexp.type === 'string');
     var s = interpret(_, _cadr(obj), scope);
@@ -718,7 +820,7 @@ var Global = new Scope(null, {
     return (idx === -1) ? [] : idx;
   },
 
-  'string=': function(_, obj, scope) {
+  'string=': function string_EQUAL_TO(_, obj, scope) {
     var v1 = interpret(_, _car(obj), scope);
     assert((typeof v1 === 'string') || (v1.type === 'string'));
     if(v1.type === 'string') v1 = v1.value;
@@ -728,12 +830,18 @@ var Global = new Scope(null, {
     return (v1 === v2) ? 't' : [];
   },
 
-  stringp: function(_, obj, scope) {
+  stringp: function stringp(_, obj, scope) {
     var s = interpret(_, _car(obj), scope);
     return (s.type === 'string') ? 't' : [];
   },
 
-  substring: function(_, obj, scope) {
+  'switch-to-buffer': function switch_to_buffer(_, obj, scope) {
+    var s = interpret(_, _car(obj), scope);
+    assert(s.type === 'buffer');
+    _cur_buffer = s;
+  },
+
+  substring: function substring(_, obj, scope) {
     var v1 = interpret(_, _car(obj), scope);
     assert(v1.type === 'string');
     var v2 = interpret(_, _cadr(obj), scope);
@@ -747,7 +855,7 @@ var Global = new Scope(null, {
     };
   },
 
-  unless: function(_, obj, scope) {
+  unless: function unless(_, obj, scope) {
     if(is_nil(interpret(_, _car(obj), scope))) {
       var r = [];
       list_for_each(_, _cdr(obj), function(_, item){ 
@@ -759,7 +867,7 @@ var Global = new Scope(null, {
     }
   },
 
-  upcase: function(_, obj, scope) {
+  upcase: function upcase(_, obj, scope) {
     var v = interpret(_, _car(obj), scope);
     assert(typeof v === 'number' || v.type === 'string');
     if(v.type === 'string') {
@@ -772,7 +880,7 @@ var Global = new Scope(null, {
     }
   },
 
-  while: function(_, obj, scope) {
+  while: function WHILE(_, obj, scope) {
     var r  = [];
     while(!is_nil(interpret(_, _car(obj), scope))) {
       list_for_each(_, _cdr(obj), function(_, item) {
@@ -784,13 +892,6 @@ var Global = new Scope(null, {
 });
 
 Global.set([], []);
-
-function READLINE(callback) {
-  READLINE_CALLBACK = function(s) {
-    callback(null, { type: 'string', value: s });
-  };
-};
-var READLINE_CALLBACK = null;
 
 document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('input').addEventListener('keyup', function(e) {
@@ -804,18 +905,18 @@ document.addEventListener('DOMContentLoaded', function(){
     cb(s);
   });
 
-  function onexit () {
+  function onexit (ex, ret) {
+    if(ex) {
+      console.log('lisp stack:',Stack);
+      console.log(ex.message);
+      console.log(ex.stack);
+    }
     console.log('game over');
   }
 
   var xhr = new XMLHttpRequest();
   xhr.onload = function() {
-    try {
-      interpret(onexit, new Parser(this.responseText).tokenize(), Global);
-    } catch (e) {
-      console.log(Stack);
-      throw e;
-    }
+    interpret(onexit, new Parser(this.responseText).tokenize(), Global);
   };
   xhr.open('get', 'dunnet.el?' + Math.random(), true);
   xhr.overrideMimeType("text/plain");

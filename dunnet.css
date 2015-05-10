@@ -1,0 +1,49 @@
+kbd {
+  -moz-border-radius:3px;
+  -moz-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+  -webkit-border-radius:3px;
+  -webkit-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+  background-color:#f7f7f7;
+  border:1px solid #ccc;
+  border-radius:3px;
+  box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+  color:#333;
+  display:inline-block;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:11px;
+  line-height:1.4;
+  margin:0 .1em;
+  padding:.1em .6em;
+  text-shadow:0 1px 0 #fff;
+}
+
+#main-content {
+  position: relative;
+  width: 800px;
+  height: 600px;
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  overflow: auto;
+}
+
+#terminal {
+  font-family: Consolas,monaco,"Source Code Pro","Lucida Console",monospace;
+  white-space: pre;
+  line-height: 1.5;
+}
+
+#footer-left {
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+}
+#footer-right {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+}
+
+#input {
+  width: 80ex;
+}
