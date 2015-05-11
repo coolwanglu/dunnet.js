@@ -1,0 +1,72 @@
+/* http://meta.superuser.com/questions/4788/css-for-the-new-kbd-style */
+a {
+  color: inherit;
+  margin-right: 10px;
+}
+
+a:not(:hover) {
+  text-decoration: none;
+}
+
+kbd, button {
+  -moz-border-radius:3px;
+  -moz-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+  -webkit-border-radius:3px;
+  -webkit-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+  background-color:#f7f7f7;
+  border:1px solid #ccc;
+  border-radius:3px;
+  box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+  color:#333;
+  display:inline-block;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:11px;
+  line-height:1.4;
+  margin:0 .1em;
+  padding:.1em .6em;
+  text-shadow:0 1px 0 #fff;
+}
+
+#main-content {
+  position: relative;
+  width: 800px;
+  height: 600px;
+  margin: auto;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  overflow: auto;
+}
+
+#terminal,
+#input{
+  font-family: Consolas,monaco,"Source Code Pro","Lucida Console",monospace;
+  font-size: 16px;
+  white-space: pre;
+  line-height: 1.5;
+}
+
+#footer-left {
+  position: fixed;
+  left: 20px;
+  bottom: 15px;
+}
+#footer-right {
+  position: fixed;
+  right: 20px;
+  bottom: 15px;
+}
+
+#input {
+  width: 80ex;
+  outline: none;
+  border: none;
+}
+
+#main-content:not(.game-over) #game-over {
+  display: none;
+}
+
+#main-content.game-over input {
+  display: none;
+}
+
