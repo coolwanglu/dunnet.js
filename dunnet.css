@@ -1,4 +1,3 @@
-/* http://meta.superuser.com/questions/4788/css-for-the-new-kbd-style */
 a {
   color: inherit;
   margin-right: 10px;
@@ -8,6 +7,7 @@ a:not(:hover) {
   text-decoration: none;
 }
 
+/* http://meta.superuser.com/questions/4788/css-for-the-new-kbd-style */
 kbd, button {
   -moz-border-radius:3px;
   -moz-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
