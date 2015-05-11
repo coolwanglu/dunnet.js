@@ -1,10 +1,13 @@
 a {
   color: inherit;
-  margin-right: 10px;
 }
 
 a:not(:hover) {
   text-decoration: none;
+}
+
+.footer .right a {
+  margin-right: 10px;
 }
 
 /* http://meta.superuser.com/questions/4788/css-for-the-new-kbd-style */
