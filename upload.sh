@@ -10,7 +10,11 @@ rm /tmp/dunnet.js/* || true
 for f in $FILES; do
     cp $f /tmp/dunnet.js/
 done
+
 rm meli.js
+rm cXVlc3Rpb25z
+rm d2Fsa3Rocm91Z2g\=
+
 git checkout gh-pages
 for f in $FILES; do
     cp /tmp/dunnet.js/$f .
