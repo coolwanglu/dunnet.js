@@ -26,8 +26,6 @@ var MELI = function () {
         if (!condition) throw new Error('assertion failed'); } 
     
     
-    function InterpreterError(message) { this.message = message; } 
-    
     function Parser(str) { 
         this.s = 'progn\n' + str + '\n)'; 
         this.idx = 0; } 
@@ -204,7 +202,7 @@ var MELI = function () {
     
     
     
-    function _list_for_each(_, l, f) { var __frame = { name: '_list_for_each', line: 207 }; return __func(_, this, arguments, _list_for_each, 0, __frame, function __$_list_for_each() { 
+    function _list_for_each(_, l, f) { var __frame = { name: '_list_for_each', line: 205 }; return __func(_, this, arguments, _list_for_each, 0, __frame, function __$_list_for_each() { 
             return function ___(__break) { var __more; var __loop = __cb(_, __frame, 0, 0, function __$_list_for_each() { __more = false; var __1 = true; if (__1) { 
                         if (_is_nil(l)) { return _(null); } 
                         return f(__cb(_, __frame, 3, 0, function __$_list_for_each() { 
@@ -268,7 +266,7 @@ var MELI = function () {
     
     
     var Stack = []; 
-    function _interpret(_, obj, scope) { var funcname, f, r, func_scope, cur_arg, cur_value, result; var __frame = { name: '_interpret', line: 271 }; return __func(_, this, arguments, _interpret, 0, __frame, function __$_interpret() { 
+    function _interpret(_, obj, scope) { var funcname, f, r, func_scope, cur_arg, cur_value, result; var __frame = { name: '_interpret', line: 269 }; return __func(_, this, arguments, _interpret, 0, __frame, function __$_interpret() { 
             assert(scope); 
             return function __$_interpret(__then) { if (obj instanceof Array) { 
                     if (_is_nil(obj)) { return _(null, []); } funcname = _car(obj); 
@@ -304,7 +302,7 @@ var MELI = function () {
                                             
                                             
                                             Stack.pop(-1); 
-                                            return _(null, result); }, true, false), f.body, function __1(_, item) { var __frame = { name: '__1', line: 303 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { result = __1; _(); }, true, false), item, func_scope); }); }); }); } else { 
+                                            return _(null, result); }, true, false), f.body, function __1(_, item) { var __frame = { name: '__1', line: 301 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { result = __1; _(); }, true, false), item, func_scope); }); }); }); } else { 
                                     
                                     return _(new Error('Cannot run function ' + JSON.stringify(obj) + ' -- ' + JSON.stringify(f))); } }(__then); } }(__then); } else { 
                     
@@ -352,27 +350,27 @@ var MELI = function () {
     Global.set([], []); 
     
     var Functions = { '*': function MULTIPLY(_, obj, scope) { 
-            var r; var __frame = { name: 'MULTIPLY', line: 355 }; return __func(_, this, arguments, MULTIPLY, 0, __frame, function __$MULTIPLY() { r = 1; 
+            var r; var __frame = { name: 'MULTIPLY', line: 353 }; return __func(_, this, arguments, MULTIPLY, 0, __frame, function __$MULTIPLY() { r = 1; 
                 
                 return _list_for_each(__cb(_, __frame, 2, 0, function __$MULTIPLY() { 
                     
                     
                     
                     
-                    return _(null, r); }, true, false), obj, function __1(_, item) { var v; var __frame = { name: '__1', line: 357 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v = __1; assert(typeof v === 'number'); r *= v; _(); }, true, false), item, scope); }); }); }); }, '+': function PLUS(_, obj, scope) { 
+                    return _(null, r); }, true, false), obj, function __1(_, item) { var v; var __frame = { name: '__1', line: 355 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v = __1; assert(typeof v === 'number'); r *= v; _(); }, true, false), item, scope); }); }); }); }, '+': function PLUS(_, obj, scope) { 
             
             
-            var r; var __frame = { name: 'PLUS', line: 365 }; return __func(_, this, arguments, PLUS, 0, __frame, function __$PLUS() { r = 0; 
+            var r; var __frame = { name: 'PLUS', line: 363 }; return __func(_, this, arguments, PLUS, 0, __frame, function __$PLUS() { r = 0; 
                 
                 return _list_for_each(__cb(_, __frame, 2, 0, function __$PLUS() { 
                     
                     
                     
                     
-                    return _(null, r); }, true, false), obj, function __1(_, item) { var v; var __frame = { name: '__1', line: 367 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v = __1; assert(typeof v === 'number'); r += v; _(); }, true, false), item, scope); }); }); }); }, '-': function MINUS(_, obj, scope) { 
+                    return _(null, r); }, true, false), obj, function __1(_, item) { var v; var __frame = { name: '__1', line: 365 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v = __1; assert(typeof v === 'number'); r += v; _(); }, true, false), item, scope); }); }); }); }, '-': function MINUS(_, obj, scope) { 
             
             
-            var r, first; var __frame = { name: 'MINUS', line: 375 }; return __func(_, this, arguments, MINUS, 0, __frame, function __$MINUS() { r = 0; 
+            var r, first; var __frame = { name: 'MINUS', line: 373 }; return __func(_, this, arguments, MINUS, 0, __frame, function __$MINUS() { r = 0; 
                 first = true; 
                 
                 return _list_for_each(__cb(_, __frame, 3, 0, function __$MINUS() { 
@@ -383,16 +381,16 @@ var MELI = function () {
                     
                     
                     
-                    return _(null, r); }, true, false), obj, function __1(_, item) { var v; var __frame = { name: '__1', line: 378 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v = __1; assert(typeof v === 'number'); if (first) { first = false; r += v; } else { r -= v; } _(); }, true, false), item, scope); }); }); }); }, '1+': function ONEPLUS(_, obj, scope) { 
+                    return _(null, r); }, true, false), obj, function __1(_, item) { var v; var __frame = { name: '__1', line: 376 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v = __1; assert(typeof v === 'number'); if (first) { first = false; r += v; } else { r -= v; } _(); }, true, false), item, scope); }); }); }); }, '1+': function ONEPLUS(_, obj, scope) { 
             
             
-            var v; var __frame = { name: 'ONEPLUS', line: 389 }; return __func(_, this, arguments, ONEPLUS, 0, __frame, function __$ONEPLUS() { 
+            var v; var __frame = { name: 'ONEPLUS', line: 387 }; return __func(_, this, arguments, ONEPLUS, 0, __frame, function __$ONEPLUS() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v = __1; 
                     assert(typeof v === 'number'); 
                     return _(null, v + 1); }, true, false), _car(obj), scope); }); }, '<': function LESS_THAN(_, obj, scope) { 
             
             
-            var v1, v2; var __frame = { name: 'LESS_THAN', line: 395 }; return __func(_, this, arguments, LESS_THAN, 0, __frame, function __$LESS_THAN() { 
+            var v1, v2; var __frame = { name: 'LESS_THAN', line: 393 }; return __func(_, this, arguments, LESS_THAN, 0, __frame, function __$LESS_THAN() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v1 = __1; 
                     assert(typeof v1 === 'number'); 
                     return _interpret(__cb(_, __frame, 3, 0, function ___(__0, __2) { v2 = __2; 
@@ -401,7 +399,7 @@ var MELI = function () {
                         return _(null, v1 < v2 ? 't' : []); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, '=': function EQUAL(_, obj, scope) { 
             
             
-            var v1, v2; var __frame = { name: 'EQUAL', line: 404 }; return __func(_, this, arguments, EQUAL, 0, __frame, function __$EQUAL() { 
+            var v1, v2; var __frame = { name: 'EQUAL', line: 402 }; return __func(_, this, arguments, EQUAL, 0, __frame, function __$EQUAL() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v1 = __1; 
                     assert(typeof v1 === 'number'); 
                     return _interpret(__cb(_, __frame, 3, 0, function ___(__0, __2) { v2 = __2; 
@@ -409,7 +407,7 @@ var MELI = function () {
                         return _(null, v1 === v2 ? 't' : []); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, '>': function GREATER_THAN(_, obj, scope) { 
             
             
-            var v1, v2; var __frame = { name: 'GREATER_THAN', line: 412 }; return __func(_, this, arguments, GREATER_THAN, 0, __frame, function __$GREATER_THAN() { 
+            var v1, v2; var __frame = { name: 'GREATER_THAN', line: 410 }; return __func(_, this, arguments, GREATER_THAN, 0, __frame, function __$GREATER_THAN() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v1 = __1; 
                     assert(typeof v1 === 'number'); 
                     return _interpret(__cb(_, __frame, 3, 0, function ___(__0, __2) { v2 = __2; 
@@ -418,7 +416,7 @@ var MELI = function () {
                         return _(null, v1 > v2 ? 't' : []); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, '>=': function GREATER_THAN_OR_EQUAL_TO(_, obj, scope) { 
             
             
-            var v1, v2; var __frame = { name: 'GREATER_THAN_OR_EQUAL_TO', line: 421 }; return __func(_, this, arguments, GREATER_THAN_OR_EQUAL_TO, 0, __frame, function __$GREATER_THAN_OR_EQUAL_TO() { 
+            var v1, v2; var __frame = { name: 'GREATER_THAN_OR_EQUAL_TO', line: 419 }; return __func(_, this, arguments, GREATER_THAN_OR_EQUAL_TO, 0, __frame, function __$GREATER_THAN_OR_EQUAL_TO() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v1 = __1; 
                     assert(typeof v1 === 'number'); 
                     return _interpret(__cb(_, __frame, 3, 0, function ___(__0, __2) { v2 = __2; 
@@ -427,13 +425,13 @@ var MELI = function () {
                         return _(null, v1 >= v2 ? 't' : []); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, abs: function abs(_, obj, scope) { 
             
             
-            var v; var __frame = { name: 'abs', line: 430 }; return __func(_, this, arguments, abs, 0, __frame, function __$abs() { 
+            var v; var __frame = { name: 'abs', line: 428 }; return __func(_, this, arguments, abs, 0, __frame, function __$abs() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v = __1; 
                     assert(typeof v === 'number'); 
                     return _(null, Math.abs(v)); }, true, false), _car(obj), scope); }); }, and: function and(_, obj, scope) { 
             
             
-            var r; var __frame = { name: 'and', line: 436 }; return __func(_, this, arguments, and, 0, __frame, function __$and() { r = 't'; 
+            var r; var __frame = { name: 'and', line: 434 }; return __func(_, this, arguments, and, 0, __frame, function __$and() { r = 't'; 
                 
                 return function ___(__break) { var __more; var __loop = __cb(_, __frame, 0, 0, function __$and() { __more = false; var __2 = true; if (__2) { 
                             if (_is_nil(obj)) { return _(null, r); } 
@@ -443,7 +441,7 @@ var MELI = function () {
             
             
             
-            var l1, l2, l; var __frame = { name: 'append', line: 446 }; return __func(_, this, arguments, append, 0, __frame, function __$append() { 
+            var l1, l2, l; var __frame = { name: 'append', line: 444 }; return __func(_, this, arguments, append, 0, __frame, function __$append() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { l1 = __1; 
                     return _interpret(__cb(_, __frame, 2, 0, function ___(__0, __2) { l2 = __2; l = l1; 
                         
@@ -455,7 +453,7 @@ var MELI = function () {
                         return _(null, l1); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, aref: function aref(_, obj, scope) { 
             
             
-            var a, i; var __frame = { name: 'aref', line: 458 }; return __func(_, this, arguments, aref, 0, __frame, function __$aref() { 
+            var a, i; var __frame = { name: 'aref', line: 456 }; return __func(_, this, arguments, aref, 0, __frame, function __$aref() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { a = __1; 
                     assert(a.type === 'vector' || a.type === 'string'); 
                     return _interpret(__cb(_, __frame, 3, 0, function ___(__0, __2) { i = __2; 
@@ -463,7 +461,7 @@ var MELI = function () {
                         return _(null, a.value[i]); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, aset: function aset(_, obj, scope) { 
             
             
-            var a, i, v; var __frame = { name: 'aset', line: 466 }; return __func(_, this, arguments, aset, 0, __frame, function __$aset() { 
+            var a, i, v; var __frame = { name: 'aset', line: 464 }; return __func(_, this, arguments, aset, 0, __frame, function __$aset() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { a = __1; 
                     return _interpret(__cb(_, __frame, 2, 0, function ___(__0, __2) { i = __2; 
                         assert(typeof i === 'number'); 
@@ -473,7 +471,7 @@ var MELI = function () {
                             return _(null, v); }, true, false), _cadr(_cdr(obj)), scope); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, assq: function assq(_, obj, scope) { 
             
             
-            var k, l; var __frame = { name: 'assq', line: 476 }; return __func(_, this, arguments, assq, 0, __frame, function __$assq() { 
+            var k, l; var __frame = { name: 'assq', line: 474 }; return __func(_, this, arguments, assq, 0, __frame, function __$assq() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { k = __1; 
                     return _interpret(__cb(_, __frame, 2, 0, function ___(__0, __2) { l = __2; 
                         
@@ -485,13 +483,13 @@ var MELI = function () {
             
             
             
-            var s; var __frame = { name: 'boundp', line: 488 }; return __func(_, this, arguments, boundp, 0, __frame, function __$boundp() { 
+            var s; var __frame = { name: 'boundp', line: 486 }; return __func(_, this, arguments, boundp, 0, __frame, function __$boundp() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { s = __1; 
                     assert(typeof s === 'string'); 
                     return _(null, scope.get_containing_scope(s) ? 't' : []); }, true, false), _car(obj), scope); }); }, 'buffer-substring': function buffer_substring(_, obj, scope) { 
             
             
-            var start, end; var __frame = { name: 'buffer_substring', line: 494 }; return __func(_, this, arguments, buffer_substring, 0, __frame, function __$buffer_substring() { 
+            var start, end; var __frame = { name: 'buffer_substring', line: 492 }; return __func(_, this, arguments, buffer_substring, 0, __frame, function __$buffer_substring() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { start = __1; 
                     assert(typeof start === 'number'); 
                     return _interpret(__cb(_, __frame, 3, 0, function ___(__0, __2) { end = __2; 
@@ -502,22 +500,22 @@ var MELI = function () {
             
             
             
-            var l; var __frame = { name: 'car', line: 505 }; return __func(_, this, arguments, car, 0, __frame, function __$car() { 
+            var l; var __frame = { name: 'car', line: 503 }; return __func(_, this, arguments, car, 0, __frame, function __$car() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { l = __1; 
                     return _(null, _car(l)); }, true, false), _car(obj), scope); }); }, cadr: function cadr(_, obj, scope) { 
             
             
-            var l; var __frame = { name: 'cadr', line: 510 }; return __func(_, this, arguments, cadr, 0, __frame, function __$cadr() { 
+            var l; var __frame = { name: 'cadr', line: 508 }; return __func(_, this, arguments, cadr, 0, __frame, function __$cadr() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { l = __1; 
                     return _(null, _car(_cdr(l))); }, true, false), _car(obj), scope); }); }, cdr: function cdr(_, obj, scope) { 
             
             
-            var l; var __frame = { name: 'cdr', line: 515 }; return __func(_, this, arguments, cdr, 0, __frame, function __$cdr() { 
+            var l; var __frame = { name: 'cdr', line: 513 }; return __func(_, this, arguments, cdr, 0, __frame, function __$cdr() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { l = __1; 
                     return _(null, _cdr(l)); }, true, false), _car(obj), scope); }); }, concat: function concat(_, obj, scope) { 
             
             
-            var r; var __frame = { name: 'concat', line: 520 }; return __func(_, this, arguments, concat, 0, __frame, function __$concat() { r = []; 
+            var r; var __frame = { name: 'concat', line: 518 }; return __func(_, this, arguments, concat, 0, __frame, function __$concat() { r = []; 
                 
                 return _list_for_each(__cb(_, __frame, 2, 0, function __$concat() { 
                     
@@ -526,11 +524,11 @@ var MELI = function () {
                     
                     return _(null, { type: 'string', value: r }); }, true, false), obj, function __1(_, item) { 
                     
-                    var v; var __frame = { name: '__1', line: 522 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v = __1; assert(v.type === 'string'); r = r.concat(v.value); _(); }, true, false), item, scope); }); }); }); }, cond: function cond(_, obj, scope) { 
+                    var v; var __frame = { name: '__1', line: 520 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v = __1; assert(v.type === 'string'); r = r.concat(v.value); _(); }, true, false), item, scope); }); }); }); }, cond: function cond(_, obj, scope) { 
             
             
             
-            var result, clause; var __frame = { name: 'cond', line: 533 }; return __func(_, this, arguments, cond, 0, __frame, function __$cond() { result = []; 
+            var result, clause; var __frame = { name: 'cond', line: 531 }; return __func(_, this, arguments, cond, 0, __frame, function __$cond() { result = []; 
                 
                 return function ___(__break) { var __more; var __loop = __cb(_, __frame, 0, 0, function __$cond() { __more = false; var __3 = !_is_nil(obj); if (__3) { clause = _car(obj); 
                             
@@ -548,28 +546,26 @@ var MELI = function () {
                     return _(null, result); }); }); }, 'condition-case': function condition_case(_, obj, scope) { 
             
             
-            var r; var __frame = { name: 'condition_case', line: 551 }; return __func(_, this, arguments, condition_case, 0, __frame, function __$condition_case() { 
+            var r; var __frame = { name: 'condition_case', line: 549 }; return __func(_, this, arguments, condition_case, 0, __frame, function __$condition_case() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { assert(_is_nil(__1)); 
                     assert(_caar(_cddr(obj)) === 'error'); 
                     
                     return function ___(__then) { (function ___(_) { __tryCatch(_, function __$condition_case() { 
                                 return _interpret(__cb(_, __frame, 5, 0, function ___(__0, __2) { r = __2; __then(); }, true, false), _cadr(obj), scope); }); }(function ___(ex, __result) { 
                             __catch(function __$condition_case() { if (ex) { 
-                                    return function __$condition_case(__then) { if (ex instanceof InterpreterError) { 
-                                            console.log(ex.message); 
-                                            return _interpret(__cb(_, __frame, 9, 0, function ___(__0, __4) { var __3 = __4; r = __3; __then(); }, true, false), _cadr(_car(_cddr(obj))), scope); } else { 
-                                            return _(ex); } }(__then); } else { _(null, __result); } }, _); })); }(function ___() { __tryCatch(_, function __$condition_case() { 
+                                    console.log(ex.message); 
+                                    return _interpret(__cb(_, __frame, 8, 0, function ___(__0, __4) { var __3 = __4; r = __3; __then(); }, true, false), _cadr(_car(_cddr(obj))), scope); } else { _(null, __result); } }, _); })); }(function ___() { __tryCatch(_, function __$condition_case() { 
                             
                             return _(null, r); }); }); }, true, false), _car(obj), scope); }); }, 'current-buffer': function current_buffer(_, obj, scope) { 
             
             
-            var __frame = { name: 'current_buffer', line: 566 }; return __func(_, this, arguments, current_buffer, 0, __frame, function __$current_buffer() { 
+            var __frame = { name: 'current_buffer', line: 562 }; return __func(_, this, arguments, current_buffer, 0, __frame, function __$current_buffer() { 
                 return _(null, _cur_buffer); }); }, 'current-time-string': function current_time_string(_, obj, scope) { 
             
             
             var now; 
             
-            function to_2s(v) { return (v < 10 ? '0' : '') + v; } var __frame = { name: 'current_time_string', line: 570 }; return __func(_, this, arguments, current_time_string, 0, __frame, function __$current_time_string() { now = new Date(); 
+            function to_2s(v) { return (v < 10 ? '0' : '') + v; } var __frame = { name: 'current_time_string', line: 566 }; return __func(_, this, arguments, current_time_string, 0, __frame, function __$current_time_string() { now = new Date(); 
                 return _(null, { type: 'string', value: _string_to_array([ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ][now.getDay()] + ' ' + [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ][now.getMonth()] + ' ' + to_2s(now.getDate()) + ' ' + to_2s(now.getHours()) + ':' + to_2s(now.getMinutes()) + ':' + to_2s(now.getSeconds()) + ' ' + now.getFullYear()) }); }); }, DEBUG: function DEBUG(_, obj, scope) { 
             
             
@@ -584,23 +580,23 @@ var MELI = function () {
             
             
             
-            var __frame = { name: 'DEBUG', line: 587 }; return __func(_, this, arguments, DEBUG, 0, __frame, function __$DEBUG() { 
+            var __frame = { name: 'DEBUG', line: 583 }; return __func(_, this, arguments, DEBUG, 0, __frame, function __$DEBUG() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { console.log('DEBUG', __1); _(); }, true, false), _car(obj), scope); }); }, defconst: function defconst(_, obj, scope) { 
             
             
-            var sym; var __frame = { name: 'defconst', line: 591 }; return __func(_, this, arguments, defconst, 0, __frame, function __$defconst() { sym = _car(obj); 
+            var sym; var __frame = { name: 'defconst', line: 587 }; return __func(_, this, arguments, defconst, 0, __frame, function __$defconst() { sym = _car(obj); 
                 
                 return _interpret(__cb(_, __frame, 2, 0, function ___(__0, __1) { Global.set(sym, __1); 
                     return _(null, sym); }, true, false), _cadr(obj), scope); }); }, defcustom: function defcustom(_, obj, scope) { 
             
             
-            var sym; var __frame = { name: 'defcustom', line: 597 }; return __func(_, this, arguments, defcustom, 0, __frame, function __$defcustom() { sym = _car(obj); 
+            var sym; var __frame = { name: 'defcustom', line: 593 }; return __func(_, this, arguments, defcustom, 0, __frame, function __$defcustom() { sym = _car(obj); 
                 
                 return _interpret(__cb(_, __frame, 2, 0, function ___(__0, __1) { Global.set(sym, __1); 
                     return _(null, sym); }, true, false), _cadr(obj), scope); }); }, 'define-key': function define_key(_, obj, scope) { 
             
             
-            var km, key, def, l, entry; var __frame = { name: 'define_key', line: 603 }; return __func(_, this, arguments, define_key, 0, __frame, function __$define_key() { 
+            var km, key, def, l, entry; var __frame = { name: 'define_key', line: 599 }; return __func(_, this, arguments, define_key, 0, __frame, function __$define_key() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { km = __1; 
                     assert(_car(km) === 'keymap'); 
                     
@@ -630,9 +626,9 @@ var MELI = function () {
                             return _(null, def); }, true, false), _cadr(_cdr(obj)), scope); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, defgroup: function defgroup(_) { 
             
             
-            var __frame = { name: 'defgroup', line: 633 }; return __func(_, this, arguments, defgroup, 0, __frame, function __$defgroup() { return _(null, []); }); }, defun: function defun(_, obj, scope) { 
+            var __frame = { name: 'defgroup', line: 629 }; return __func(_, this, arguments, defgroup, 0, __frame, function __$defgroup() { return _(null, []); }); }, defun: function defun(_, obj, scope) { 
             
-            var name, func; var __frame = { name: 'defun', line: 635 }; return __func(_, this, arguments, defun, 0, __frame, function __$defun() { name = _car(obj); 
+            var name, func; var __frame = { name: 'defun', line: 631 }; return __func(_, this, arguments, defun, 0, __frame, function __$defun() { name = _car(obj); 
                 func = { name: name, type: 'function', args: _cadr(obj), body: _cddr(obj) }; 
                 
                 
@@ -644,13 +640,13 @@ var MELI = function () {
                 return _(null, func); }); }, defvar: function defvar(_, obj, scope) { 
             
             
-            var sym; var __frame = { name: 'defvar', line: 647 }; return __func(_, this, arguments, defvar, 0, __frame, function __$defvar() { sym = _car(obj); 
+            var sym; var __frame = { name: 'defvar', line: 643 }; return __func(_, this, arguments, defvar, 0, __frame, function __$defvar() { sym = _car(obj); 
                 
                 return _interpret(__cb(_, __frame, 2, 0, function ___(__0, __1) { Global.set(sym, __1); 
                     return _(null, sym); }, true, false), _cadr(obj), scope); }); }, 'delete-file': function delete_file(_, obj, scope) { 
             
             
-            var fn; var __frame = { name: 'delete_file', line: 653 }; return __func(_, this, arguments, delete_file, 0, __frame, function __$delete_file() { 
+            var fn; var __frame = { name: 'delete_file', line: 649 }; return __func(_, this, arguments, delete_file, 0, __frame, function __$delete_file() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { fn = __1; 
                     assert(fn.type === 'string'); 
                     fn = _array_to_string(fn.value); 
@@ -660,7 +656,7 @@ var MELI = function () {
                     return _(null, []); }, true, false), _car(obj), scope); }); }, dolist: function dolist(_, obj, scope) { 
             
             
-            var arg, v, list, s; var __frame = { name: 'dolist', line: 663 }; return __func(_, this, arguments, dolist, 0, __frame, function __$dolist() { arg = _car(obj); 
+            var arg, v, list, s; var __frame = { name: 'dolist', line: 659 }; return __func(_, this, arguments, dolist, 0, __frame, function __$dolist() { arg = _car(obj); 
                 
                 assert(arg instanceof Array); v = _car(arg); 
                 
@@ -675,10 +671,10 @@ var MELI = function () {
                         
                         
                         
-                        return _(null, s.get(_cadr(_cdr(arg)))); }, true, false), list, function __1(_, item) { var __frame = { name: '__1', line: 672 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { s.set(v, item); return _list_for_each(__cb(_, __frame, 2, 0, function __$__1() { _(); }, true, false), _cdr(obj), function __1(_, item) { var __frame = { name: '__1', line: 674 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function __$__1() { _(); }, true, false), item, s); }); }); }); }); }, true, false), _cadr(arg), scope); }); }, downcase: function downcase(_, obj, scope) { 
+                        return _(null, s.get(_cadr(_cdr(arg)))); }, true, false), list, function __1(_, item) { var __frame = { name: '__1', line: 668 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { s.set(v, item); return _list_for_each(__cb(_, __frame, 2, 0, function __$__1() { _(); }, true, false), _cdr(obj), function __1(_, item) { var __frame = { name: '__1', line: 670 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function __$__1() { _(); }, true, false), item, s); }); }); }); }); }, true, false), _cadr(arg), scope); }); }, downcase: function downcase(_, obj, scope) { 
             
             
-            var v; var __frame = { name: 'downcase', line: 681 }; return __func(_, this, arguments, downcase, 0, __frame, function __$downcase() { 
+            var v; var __frame = { name: 'downcase', line: 677 }; return __func(_, this, arguments, downcase, 0, __frame, function __$downcase() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v = __1; 
                     assert(typeof v === 'number' || v.type === 'string'); 
                     if (v.type === 'string') { 
@@ -693,30 +689,30 @@ var MELI = function () {
             
             
             
-            var v1, v2; var __frame = { name: 'eq', line: 696 }; return __func(_, this, arguments, eq, 0, __frame, function __$eq() { 
+            var v1, v2; var __frame = { name: 'eq', line: 692 }; return __func(_, this, arguments, eq, 0, __frame, function __$eq() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v1 = __1; 
                     return _interpret(__cb(_, __frame, 2, 0, function ___(__0, __2) { v2 = __2; 
                         return _(null, _eq(v1, v2)); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, 'erase-buffer': function erase_buffer(_, obj, scope) { 
             
             
-            var __frame = { name: 'erase_buffer', line: 702 }; return __func(_, this, arguments, erase_buffer, 0, __frame, function __$erase_buffer() { 
+            var __frame = { name: 'erase_buffer', line: 698 }; return __func(_, this, arguments, erase_buffer, 0, __frame, function __$erase_buffer() { 
                 _cur_buffer.value = []; 
                 return _(null, []); }); }, eval: function eval(_, obj, scope) { 
             
             
-            var __frame = { name: 'eval', line: 707 }; return __func(_, this, arguments, eval, 0, __frame, function __$eval() { 
+            var __frame = { name: 'eval', line: 703 }; return __func(_, this, arguments, eval, 0, __frame, function __$eval() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __2) { return _interpret(__cb(_, __frame, 1, 0, _, true, false), __2, scope); }, true, false), _car(obj), scope); }); }, 'eval-and-compile': function eval_and_compile(_) { 
             
             
-            var __frame = { name: 'eval_and_compile', line: 711 }; return __func(_, this, arguments, eval_and_compile, 0, __frame, function __$eval_and_compile() { return _(null, []); }); }, 'eval-current-buffer': function eval_current_buffer(_, obj, scope) { 
+            var __frame = { name: 'eval_and_compile', line: 707 }; return __func(_, this, arguments, eval_and_compile, 0, __frame, function __$eval_and_compile() { return _(null, []); }); }, 'eval-current-buffer': function eval_current_buffer(_, obj, scope) { 
             
-            var __frame = { name: 'eval_current_buffer', line: 713 }; return __func(_, this, arguments, eval_current_buffer, 0, __frame, function __$eval_current_buffer() { 
+            var __frame = { name: 'eval_current_buffer', line: 709 }; return __func(_, this, arguments, eval_current_buffer, 0, __frame, function __$eval_current_buffer() { 
                 return _interpret(__cb(_, __frame, 1, 0, _, true, false), new Parser(_array_to_string(_cur_buffer.value)).tokenize(), scope); }); }, 'eval-when-compile': function eval_when_compile(_) { 
             
             
-            var __frame = { name: 'eval_when_compile', line: 717 }; return __func(_, this, arguments, eval_when_compile, 0, __frame, function __$eval_when_compile() { return _(null, []); }); }, 'file-exists-p': function file_exists_p(_, obj, scope) { 
+            var __frame = { name: 'eval_when_compile', line: 713 }; return __func(_, this, arguments, eval_when_compile, 0, __frame, function __$eval_when_compile() { return _(null, []); }); }, 'file-exists-p': function file_exists_p(_, obj, scope) { 
             
-            var fn, data; var __frame = { name: 'file_exists_p', line: 719 }; return __func(_, this, arguments, file_exists_p, 0, __frame, function __$file_exists_p() { 
+            var fn, data; var __frame = { name: 'file_exists_p', line: 715 }; return __func(_, this, arguments, file_exists_p, 0, __frame, function __$file_exists_p() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { fn = __1; 
                     assert(fn.type === 'string'); 
                     fn = _array_to_string(fn.value); 
@@ -729,7 +725,7 @@ var MELI = function () {
                     return _(null, []); }, true, false), _car(obj), scope); }); }, fset: function fset(_, obj, scope) { 
             
             
-            var fn, fn2; var __frame = { name: 'fset', line: 732 }; return __func(_, this, arguments, fset, 0, __frame, function __$fset() { 
+            var fn, fn2; var __frame = { name: 'fset', line: 728 }; return __func(_, this, arguments, fset, 0, __frame, function __$fset() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { fn = __1; 
                     assert(typeof fn === 'string'); 
                     return _interpret(__cb(_, __frame, 3, 0, function ___(__0, __2) { fn2 = __2; 
@@ -739,34 +735,34 @@ var MELI = function () {
                         return _(null, fn2); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, 'get-buffer-create': function get_buffer_create(_, obj, scope) { 
             
             
-            var s; var __frame = { name: 'get_buffer_create', line: 742 }; return __func(_, this, arguments, get_buffer_create, 0, __frame, function __$get_buffer_create() { 
+            var s; var __frame = { name: 'get_buffer_create', line: 738 }; return __func(_, this, arguments, get_buffer_create, 0, __frame, function __$get_buffer_create() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { s = __1; 
                     assert(s.type === 'string'); 
                     return _(null, _get_or_create_buffer(_array_to_string(s.value))); }, true, false), _car(obj), scope); }); }, 'goto-char': function goto_char(_) { 
             
             
-            var __frame = { name: 'goto_char', line: 748 }; return __func(_, this, arguments, goto_char, 0, __frame, function __$goto_char() { return _(null, []); }); }, if: function IF(_, obj, scope) { 
+            var __frame = { name: 'goto_char', line: 744 }; return __func(_, this, arguments, goto_char, 0, __frame, function __$goto_char() { return _(null, []); }); }, if: function IF(_, obj, scope) { 
             
-            var r; var __frame = { name: 'IF', line: 750 }; return __func(_, this, arguments, IF, 0, __frame, function __$IF() { 
+            var r; var __frame = { name: 'IF', line: 746 }; return __func(_, this, arguments, IF, 0, __frame, function __$IF() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __3) { var __2 = _is_nil(__3); return function __$IF(__then) { if (__2) { r = []; 
                             
                             return _list_for_each(__cb(_, __frame, 3, 0, function __$IF() { 
                                 
                                 
-                                return _(null, r); }, true, false), _cddr(obj), function __1(_, item) { var __frame = { name: '__1', line: 753 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { r = __1; _(); }, true, false), item, scope); }); }); } else { 
+                                return _(null, r); }, true, false), _cddr(obj), function __1(_, item) { var __frame = { name: '__1', line: 749 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { r = __1; _(); }, true, false), item, scope); }); }); } else { 
                             
                             return _interpret(__cb(_, __frame, 8, 0, _, true, false), _cadr(obj), scope); } }(_); }, true, false), _car(obj), scope); }); }, insert: function insert(_, obj, scope) { 
             
             
             
-            var s; var __frame = { name: 'insert', line: 762 }; return __func(_, this, arguments, insert, 0, __frame, function __$insert() { 
+            var s; var __frame = { name: 'insert', line: 758 }; return __func(_, this, arguments, insert, 0, __frame, function __$insert() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { s = __1; 
                     assert(s.type === 'string'); 
                     _cur_buffer.value = _cur_buffer.value.concat(s.value); 
                     return _(null, []); }, true, false), _car(obj), scope); }); }, 'insert-file-contents': function insert_file_contents(_, obj, scope) { 
             
             
-            var fn, data; var __frame = { name: 'insert_file_contents', line: 769 }; return __func(_, this, arguments, insert_file_contents, 0, __frame, function __$insert_file_contents() { 
+            var fn, data; var __frame = { name: 'insert_file_contents', line: 765 }; return __func(_, this, arguments, insert_file_contents, 0, __frame, function __$insert_file_contents() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { fn = __1; 
                     assert(fn.type === 'string'); 
                     filename = _array_to_string(fn.value); 
@@ -777,18 +773,18 @@ var MELI = function () {
                             return _(null, [ { type: 'string', value: fn.value }, [ data.length, [] ] ]); } } 
                     
                     
-                    return _(new InterpreterError('Cannot find file: ' + filename)); }, true, false), _car(obj), scope); }); }, interactive: function interactive(_) { 
+                    return _(new Error('Cannot find file: ' + filename)); }, true, false), _car(obj), scope); }); }, interactive: function interactive(_) { 
             
             
-            var __frame = { name: 'interactive', line: 783 }; return __func(_, this, arguments, interactive, 0, __frame, function __$interactive() { return _(null, []); }); }, intern: function intern(_, obj, scope) { 
+            var __frame = { name: 'interactive', line: 779 }; return __func(_, this, arguments, interactive, 0, __frame, function __$interactive() { return _(null, []); }); }, intern: function intern(_, obj, scope) { 
             
-            var s; var __frame = { name: 'intern', line: 785 }; return __func(_, this, arguments, intern, 0, __frame, function __$intern() { 
+            var s; var __frame = { name: 'intern', line: 781 }; return __func(_, this, arguments, intern, 0, __frame, function __$intern() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { s = __1; 
                     assert(s.type === 'string'); 
                     return _(null, _array_to_string(s.value)); }, true, false), _car(obj), scope); }); }, 'kill-buffer': function kill_buffer(_, obj, scope) { 
             
             
-            var b, r; var __frame = { name: 'kill_buffer', line: 791 }; return __func(_, this, arguments, kill_buffer, 0, __frame, function __$kill_buffer() { 
+            var b, r; var __frame = { name: 'kill_buffer', line: 787 }; return __func(_, this, arguments, kill_buffer, 0, __frame, function __$kill_buffer() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { b = __1; 
                     assert(b.type === 'buffer'); r = []; 
                     
@@ -801,7 +797,7 @@ var MELI = function () {
                     return _(null, r); }, true, false), _car(obj), scope); }); }, length: function length(_, obj, scope) { 
             
             
-            var s, l; var __frame = { name: 'length', line: 804 }; return __func(_, this, arguments, length, 0, __frame, function __$length() { 
+            var s, l; var __frame = { name: 'length', line: 800 }; return __func(_, this, arguments, length, 0, __frame, function __$length() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { s = __1; 
                     if (s.type === 'string') { return _(null, s.value.length); } 
                     if (s instanceof Array) { l = 0; 
@@ -815,7 +811,7 @@ var MELI = function () {
                     assert(false); _(); }, true, false), _car(obj), scope); }); }, let: function LET(_, obj, scope) { 
             
             
-            var let_scope, r; var __frame = { name: 'LET', line: 818 }; return __func(_, this, arguments, LET, 0, __frame, function __$LET() { let_scope = new Scope(scope); 
+            var let_scope, r; var __frame = { name: 'LET', line: 814 }; return __func(_, this, arguments, LET, 0, __frame, function __$LET() { let_scope = new Scope(scope); 
                 
                 return _list_for_each(__cb(_, __frame, 2, 0, function __$LET() { r = []; 
                     
@@ -825,29 +821,29 @@ var MELI = function () {
                     return _list_for_each(__cb(_, __frame, 7, 0, function __$LET() { 
                         
                         
-                        return _(null, r); }, true, false), _cdr(obj), function __2(_, item) { var __frame = { name: '__2', line: 825 }; return __func(_, this, arguments, __2, 0, __frame, function __$__2() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { r = __1; _(); }, true, false), item, let_scope); }); }); }, true, false), _car(obj), function __1(_, item) { var __frame = { name: '__1', line: 820 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return function __$__1(__then) { if (typeof item === 'string') { let_scope.set(item, []); __then(); } else { return _interpret(__cb(_, __frame, 2, 0, function ___(__0, __1) { let_scope.set(_car(item), __1); __then(); }, true, false), _cadr(item), let_scope); } }(_); }); }); }); }, list: function list(_, obj, scope) { 
+                        return _(null, r); }, true, false), _cdr(obj), function __2(_, item) { var __frame = { name: '__2', line: 821 }; return __func(_, this, arguments, __2, 0, __frame, function __$__2() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { r = __1; _(); }, true, false), item, let_scope); }); }); }, true, false), _car(obj), function __1(_, item) { var __frame = { name: '__1', line: 816 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return function __$__1(__then) { if (typeof item === 'string') { let_scope.set(item, []); __then(); } else { return _interpret(__cb(_, __frame, 2, 0, function ___(__0, __1) { let_scope.set(_car(item), __1); __then(); }, true, false), _cadr(item), let_scope); } }(_); }); }); }); }, list: function list(_, obj, scope) { 
             
             
-            var result, l; var __frame = { name: 'list', line: 831 }; return __func(_, this, arguments, list, 0, __frame, function __$list() { result = []; 
+            var result, l; var __frame = { name: 'list', line: 827 }; return __func(_, this, arguments, list, 0, __frame, function __$list() { result = []; 
                 l = result; 
                 
                 return _list_for_each(__cb(_, __frame, 3, 0, function __$list() { 
                     
                     
                     
-                    return _(null, result); }, true, false), obj, function __1(_, item) { var __frame = { name: '__1', line: 834 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { l.push(__1, []); l = l[1]; _(); }, true, false), item, scope); }); }); }); }, listp: function listp(_, obj, scope) { 
+                    return _(null, result); }, true, false), obj, function __1(_, item) { var __frame = { name: '__1', line: 830 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { l.push(__1, []); l = l[1]; _(); }, true, false), item, scope); }); }); }); }, listp: function listp(_, obj, scope) { 
             
             
-            var l; var __frame = { name: 'listp', line: 841 }; return __func(_, this, arguments, listp, 0, __frame, function __$listp() { 
+            var l; var __frame = { name: 'listp', line: 837 }; return __func(_, this, arguments, listp, 0, __frame, function __$listp() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { l = __1; 
                     return _(null, l instanceof Array ? 't' : []); }, true, false), _car(obj), scope); }); }, 'make-sparse-keymap': function make_sparse_keymap(_, obj, scope) { 
             
             
-            var __frame = { name: 'make_sparse_keymap', line: 846 }; return __func(_, this, arguments, make_sparse_keymap, 0, __frame, function __$make_sparse_keymap() { 
+            var __frame = { name: 'make_sparse_keymap', line: 842 }; return __func(_, this, arguments, make_sparse_keymap, 0, __frame, function __$make_sparse_keymap() { 
                 return _(null, [ 'keymap', [] ]); }); }, 'make-keymap': function make_keymap(_, obj, scope) { 
             
             
-            var km, i; var __frame = { name: 'make_keymap', line: 850 }; return __func(_, this, arguments, make_keymap, 0, __frame, function __$make_keymap() { km = []; 
+            var km, i; var __frame = { name: 'make_keymap', line: 846 }; return __func(_, this, arguments, make_keymap, 0, __frame, function __$make_keymap() { km = []; 
                 
                 for (i = 0; i < 256; ++i) { 
                     km.push([]); } 
@@ -857,7 +853,7 @@ var MELI = function () {
             
             
             
-            var r, len, o, i; var __frame = { name: 'make_vector', line: 860 }; return __func(_, this, arguments, make_vector, 0, __frame, function __$make_vector() { r = []; 
+            var r, len, o, i; var __frame = { name: 'make_vector', line: 856 }; return __func(_, this, arguments, make_vector, 0, __frame, function __$make_vector() { r = []; 
                 
                 return _interpret(__cb(_, __frame, 2, 0, function ___(__0, __1) { len = __1; 
                     assert(typeof len === 'number'); 
@@ -870,7 +866,7 @@ var MELI = function () {
             
             
             
-            var e, l; var __frame = { name: 'member', line: 873 }; return __func(_, this, arguments, member, 0, __frame, function __$member() { 
+            var e, l; var __frame = { name: 'member', line: 869 }; return __func(_, this, arguments, member, 0, __frame, function __$member() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { e = __1; 
                     return _interpret(__cb(_, __frame, 2, 0, function ___(__0, __2) { l = __2; 
                         assert(l instanceof Array); 
@@ -881,11 +877,11 @@ var MELI = function () {
             
             
             
-            var __frame = { name: 'not', line: 884 }; return __func(_, this, arguments, not, 0, __frame, function __$not() { 
+            var __frame = { name: 'not', line: 880 }; return __func(_, this, arguments, not, 0, __frame, function __$not() { 
                 return function __$not(_) { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __2) { var __1 = _is_nil(__2); if (__1) { return _(null, 't'); } return _(null, []); }, true, false), _car(obj), scope); }(__cb(_, __frame, 1, 0, _, true, false)); }); }, nth: function nth(_, obj, scope) { 
             
             
-            var n, l, i; var __frame = { name: 'nth', line: 888 }; return __func(_, this, arguments, nth, 0, __frame, function __$nth() { 
+            var n, l, i; var __frame = { name: 'nth', line: 884 }; return __func(_, this, arguments, nth, 0, __frame, function __$nth() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { n = __1; 
                     assert(typeof n === 'number'); 
                     return _interpret(__cb(_, __frame, 3, 0, function ___(__0, __2) { l = __2; 
@@ -897,7 +893,7 @@ var MELI = function () {
                         return _(null, _car(l)); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, nthcdr: function nthcdr(_, obj, scope) { 
             
             
-            var n, l, i; var __frame = { name: 'nthcdr', line: 900 }; return __func(_, this, arguments, nthcdr, 0, __frame, function __$nthcdr() { 
+            var n, l, i; var __frame = { name: 'nthcdr', line: 896 }; return __func(_, this, arguments, nthcdr, 0, __frame, function __$nthcdr() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { n = __1; 
                     assert(typeof n === 'number'); 
                     return _interpret(__cb(_, __frame, 3, 0, function ___(__0, __2) { l = __2; 
@@ -909,7 +905,7 @@ var MELI = function () {
                         return _(null, l); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, or: function or(_, obj, scope) { 
             
             
-            var r; var __frame = { name: 'or', line: 912 }; return __func(_, this, arguments, or, 0, __frame, function __$or() { 
+            var r; var __frame = { name: 'or', line: 908 }; return __func(_, this, arguments, or, 0, __frame, function __$or() { 
                 return function ___(__break) { var __more; var __loop = __cb(_, __frame, 0, 0, function __$or() { __more = false; var __2 = true; if (__2) { 
                             if (_is_nil(obj)) { return _(null, []); } 
                             return _interpret(__cb(_, __frame, 3, 0, function ___(__0, __1) { r = __1; 
@@ -918,15 +914,15 @@ var MELI = function () {
             
             
             
-            var __frame = { name: 'point_min', line: 921 }; return __func(_, this, arguments, point_min, 0, __frame, function __$point_min() { 
+            var __frame = { name: 'point_min', line: 917 }; return __func(_, this, arguments, point_min, 0, __frame, function __$point_min() { 
                 return _(null, 1); }); }, 'point-max': function point_max(_, obj, scope) { 
             
             
-            var __frame = { name: 'point_max', line: 925 }; return __func(_, this, arguments, point_max, 0, __frame, function __$point_max() { 
+            var __frame = { name: 'point_max', line: 921 }; return __func(_, this, arguments, point_max, 0, __frame, function __$point_max() { 
                 return _(null, 1 + _cur_buffer.value.length); }); }, 'prin1-to-string': function prin1_to_string(_, obj, scope) { 
             
             
-            var v; var __frame = { name: 'prin1_to_string', line: 929 }; return __func(_, this, arguments, prin1_to_string, 0, __frame, function __$prin1_to_string() { 
+            var v; var __frame = { name: 'prin1_to_string', line: 925 }; return __func(_, this, arguments, prin1_to_string, 0, __frame, function __$prin1_to_string() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v = __1; 
                     return _(null, { type: 'string', value: _string_to_array(_repr(v)) }); }, true, false), _car(obj), scope); }); }, princ: function princ(_, obj, scope) { 
             
@@ -934,34 +930,34 @@ var MELI = function () {
             
             
             
-            var o; var __frame = { name: 'princ', line: 937 }; return __func(_, this, arguments, princ, 0, __frame, function __$princ() { 
+            var o; var __frame = { name: 'princ', line: 933 }; return __func(_, this, arguments, princ, 0, __frame, function __$princ() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { o = __1; 
                     _print(_repr(o, true)); 
                     return _(null, o); }, true, false), _car(obj), scope); }); }, progn: function progn(_, obj, scope) { 
             
             
-            var r; var __frame = { name: 'progn', line: 943 }; return __func(_, this, arguments, progn, 0, __frame, function __$progn() { r = []; 
+            var r; var __frame = { name: 'progn', line: 939 }; return __func(_, this, arguments, progn, 0, __frame, function __$progn() { r = []; 
                 
                 return _list_for_each(__cb(_, __frame, 2, 0, function __$progn() { 
                     
                     
-                    return _(null, r); }, true, false), obj, function __1(_, item) { var __frame = { name: '__1', line: 945 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { r = __1; _(); }, true, false), item, scope); }); }); }); }, provide: function provide(_) { 
+                    return _(null, r); }, true, false), obj, function __1(_, item) { var __frame = { name: '__1', line: 941 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { r = __1; _(); }, true, false), item, scope); }); }); }); }, provide: function provide(_) { 
             
             
-            var __frame = { name: 'provide', line: 951 }; return __func(_, this, arguments, provide, 0, __frame, function __$provide() { return _(null, []); }); }, quote: function quote(_, obj, scope) { 
+            var __frame = { name: 'provide', line: 947 }; return __func(_, this, arguments, provide, 0, __frame, function __$provide() { return _(null, []); }); }, quote: function quote(_, obj, scope) { 
             
-            var __frame = { name: 'quote', line: 953 }; return __func(_, this, arguments, quote, 0, __frame, function __$quote() { 
+            var __frame = { name: 'quote', line: 949 }; return __func(_, this, arguments, quote, 0, __frame, function __$quote() { 
                 return _(null, _car(obj)); }); }, random: function random(_, obj, scope) { 
             
             
-            var n, N; var __frame = { name: 'random', line: 957 }; return __func(_, this, arguments, random, 0, __frame, function __$random() { 
+            var n, N; var __frame = { name: 'random', line: 953 }; return __func(_, this, arguments, random, 0, __frame, function __$random() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { n = __1; 
                     assert(_is_nil(n) || n === 't' || typeof n === 'number'); N = typeof n === 'number' ? n : 1 << 31; 
                     
                     return _(null, Math.floor(Math.random() * N)); }, true, false), _car(obj), scope); }); }, 'read-from-minibuffer': function read_from_minibuffer(_, obj, scope) { 
             
             
-            var prmpt, init, keymap; var __frame = { name: 'read_from_minibuffer', line: 964 }; return __func(_, this, arguments, read_from_minibuffer, 0, __frame, function __$read_from_minibuffer() { 
+            var prmpt, init, keymap; var __frame = { name: 'read_from_minibuffer', line: 960 }; return __func(_, this, arguments, read_from_minibuffer, 0, __frame, function __$read_from_minibuffer() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { prmpt = __1; 
                     assert(prmpt.type === 'string'); 
                     assert(_array_to_string(prmpt.value) === ''); 
@@ -972,9 +968,9 @@ var MELI = function () {
                             return _readline(__cb(_, __frame, 8, 0, _, true, false)); }, true, false), _car(_cddr(obj)), scope); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, require: function require(_) { 
             
             
-            var __frame = { name: 'require', line: 975 }; return __func(_, this, arguments, require, 0, __frame, function __$require() { return _(null, []); }); }, rplaca: function rplaca(_, obj, scope) { 
+            var __frame = { name: 'require', line: 971 }; return __func(_, this, arguments, require, 0, __frame, function __$require() { return _(null, []); }); }, rplaca: function rplaca(_, obj, scope) { 
             
-            var l, newcar; var __frame = { name: 'rplaca', line: 977 }; return __func(_, this, arguments, rplaca, 0, __frame, function __$rplaca() { 
+            var l, newcar; var __frame = { name: 'rplaca', line: 973 }; return __func(_, this, arguments, rplaca, 0, __frame, function __$rplaca() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { l = __1; 
                     assert(l instanceof Array); 
                     return _interpret(__cb(_, __frame, 3, 0, function ___(__0, __2) { newcar = __2; 
@@ -982,14 +978,14 @@ var MELI = function () {
                         return _(null, newcar); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, 'send-string-to-terminal': function send_string_to_terminal(_, obj, scope) { 
             
             
-            var s; var __frame = { name: 'send_string_to_terminal', line: 985 }; return __func(_, this, arguments, send_string_to_terminal, 0, __frame, function __$send_string_to_terminal() { 
+            var s; var __frame = { name: 'send_string_to_terminal', line: 981 }; return __func(_, this, arguments, send_string_to_terminal, 0, __frame, function __$send_string_to_terminal() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { s = __1; 
                     assert(s.type === 'string'); 
                     _print(_array_to_string(s.value)); 
                     return _(null, []); }, true, false), _car(obj), scope); }); }, setq: function setq(_, obj, scope) { 
             
             
-            var sym, s, r; var __frame = { name: 'setq', line: 992 }; return __func(_, this, arguments, setq, 0, __frame, function __$setq() { sym = _car(obj); 
+            var sym, s, r; var __frame = { name: 'setq', line: 988 }; return __func(_, this, arguments, setq, 0, __frame, function __$setq() { sym = _car(obj); 
                 s = scope.get_containing_scope(sym) || Global; 
                 
                 return _interpret(__cb(_, __frame, 3, 0, function ___(__0, __1) { r = __1; 
@@ -997,23 +993,25 @@ var MELI = function () {
                     return _(null, r); }, true, false), _cadr(obj), scope); }); }, 'sleep-for': function sleep_for(_, obj, scope) { 
             
             
-            var s; var __frame = { name: 'sleep_for', line: 1000 }; return __func(_, this, arguments, sleep_for, 0, __frame, function __$sleep_for() { 
+            var s; var __frame = { name: 'sleep_for', line: 996 }; return __func(_, this, arguments, sleep_for, 0, __frame, function __$sleep_for() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { s = __1; 
                     assert(typeof s === 'number'); 
                     return setTimeout(__cb(_, __frame, 3, 0, function __$sleep_for() { 
                         return _(null, []); }, true, false), s * 1000); }, true, false), _car(obj), scope); }); }, 'string-match': function string_match(_, obj, scope) { 
             
             
-            var regexp, s, idx; var __frame = { name: 'string_match', line: 1007 }; return __func(_, this, arguments, string_match, 0, __frame, function __$string_match() { 
+            var regexp, s, idx; var __frame = { name: 'string_match', line: 1003 }; return __func(_, this, arguments, string_match, 0, __frame, function __$string_match() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { regexp = __1; 
                     assert(regexp.type === 'string'); 
-                    return _interpret(__cb(_, __frame, 3, 0, function ___(__0, __2) { s = __2; 
-                        assert(s.type === 'string'); idx = _array_to_string(s.value).search(new RegExp(_array_to_string(regexp.value))); 
+                    regexp = _array_to_string(regexp.value); 
+                    if (regexp === ')') { regexp = '\\)'; } 
+                    return _interpret(__cb(_, __frame, 5, 0, function ___(__0, __2) { s = __2; 
+                        assert(s.type === 'string'); idx = _array_to_string(s.value).search(new RegExp(regexp)); 
                         
                         return _(null, idx === -1 ? [] : idx); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, 'string=': function string_EQUAL_TO(_, obj, scope) { 
             
             
-            var v1, v2; var __frame = { name: 'string_EQUAL_TO', line: 1016 }; return __func(_, this, arguments, string_EQUAL_TO, 0, __frame, function __$string_EQUAL_TO() { 
+            var v1, v2; var __frame = { name: 'string_EQUAL_TO', line: 1014 }; return __func(_, this, arguments, string_EQUAL_TO, 0, __frame, function __$string_EQUAL_TO() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v1 = __1; 
                     assert(typeof v1 === 'string' || v1.type === 'string'); 
                     if (v1.type === 'string') { v1 = _array_to_string(v1.value); } 
@@ -1023,12 +1021,12 @@ var MELI = function () {
                         return _(null, v1 === v2 ? 't' : []); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, stringp: function stringp(_, obj, scope) { 
             
             
-            var s; var __frame = { name: 'stringp', line: 1026 }; return __func(_, this, arguments, stringp, 0, __frame, function __$stringp() { 
+            var s; var __frame = { name: 'stringp', line: 1024 }; return __func(_, this, arguments, stringp, 0, __frame, function __$stringp() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { s = __1; 
                     return _(null, s.type === 'string' ? 't' : []); }, true, false), _car(obj), scope); }); }, substring: function substring(_, obj, scope) { 
             
             
-            var v1, v2, v3; var __frame = { name: 'substring', line: 1031 }; return __func(_, this, arguments, substring, 0, __frame, function __$substring() { 
+            var v1, v2, v3; var __frame = { name: 'substring', line: 1029 }; return __func(_, this, arguments, substring, 0, __frame, function __$substring() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v1 = __1; 
                     assert(v1.type === 'string'); 
                     return _interpret(__cb(_, __frame, 3, 0, function ___(__0, __2) { v2 = __2; 
@@ -1042,7 +1040,7 @@ var MELI = function () {
             
             
             
-            var s; var __frame = { name: 'switch_to_buffer', line: 1045 }; return __func(_, this, arguments, switch_to_buffer, 0, __frame, function __$switch_to_buffer() { 
+            var s; var __frame = { name: 'switch_to_buffer', line: 1043 }; return __func(_, this, arguments, switch_to_buffer, 0, __frame, function __$switch_to_buffer() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { s = __1; 
                     assert(s.type === 'string' || s.type === 'buffer'); 
                     if (s.type === 'buffer') { _cur_buffer = s; } else { 
@@ -1050,24 +1048,24 @@ var MELI = function () {
                     return _(null, _cur_buffer); }, true, false), _car(obj), scope); }); }, symbolp: function symbolp(_, obj, scope) { 
             
             
-            var s; var __frame = { name: 'symbolp', line: 1053 }; return __func(_, this, arguments, symbolp, 0, __frame, function __$symbolp() { 
+            var s; var __frame = { name: 'symbolp', line: 1051 }; return __func(_, this, arguments, symbolp, 0, __frame, function __$symbolp() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { s = __1; 
                     return _(null, typeof s === 'string' ? 't' : []); }, true, false), _car(obj), scope); }); }, unless: function unless(_, obj, scope) { 
             
             
-            var r; var __frame = { name: 'unless', line: 1058 }; return __func(_, this, arguments, unless, 0, __frame, function __$unless() { 
+            var r; var __frame = { name: 'unless', line: 1056 }; return __func(_, this, arguments, unless, 0, __frame, function __$unless() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __3) { var __2 = _is_nil(__3); return function __$unless(__then) { if (__2) { r = []; 
                             
                             return _list_for_each(__cb(_, __frame, 3, 0, function __$unless() { 
                                 
                                 
-                                return _(null, r); }, true, false), _cdr(obj), function __1(_, item) { var __frame = { name: '__1', line: 1061 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { r = __1; _(); }, true, false), item, scope); }); }); } else { 
+                                return _(null, r); }, true, false), _cdr(obj), function __1(_, item) { var __frame = { name: '__1', line: 1059 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { r = __1; _(); }, true, false), item, scope); }); }); } else { 
                             
                             return _(null, []); } }(_); }, true, false), _car(obj), scope); }); }, upcase: function upcase(_, obj, scope) { 
             
             
             
-            var v; var __frame = { name: 'upcase', line: 1070 }; return __func(_, this, arguments, upcase, 0, __frame, function __$upcase() { 
+            var v; var __frame = { name: 'upcase', line: 1068 }; return __func(_, this, arguments, upcase, 0, __frame, function __$upcase() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { v = __1; 
                     assert(typeof v === 'number' || v.type === 'string'); 
                     if (v.type === 'string') { 
@@ -1082,33 +1080,33 @@ var MELI = function () {
             
             
             
-            var __frame = { name: 'user_login_name', line: 1085 }; return __func(_, this, arguments, user_login_name, 0, __frame, function __$user_login_name() { 
+            var __frame = { name: 'user_login_name', line: 1083 }; return __func(_, this, arguments, user_login_name, 0, __frame, function __$user_login_name() { 
                 return _(null, { type: 'string', value: _string_to_array('root') }); }); }, when: function when(_, obj, scope) { 
             
             
-            var r; var __frame = { name: 'when', line: 1089 }; return __func(_, this, arguments, when, 0, __frame, function __$when() { 
+            var r; var __frame = { name: 'when', line: 1087 }; return __func(_, this, arguments, when, 0, __frame, function __$when() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __3) { var __2 = !_is_nil(__3); return function __$when(__then) { if (__2) { r = []; 
                             
                             return _list_for_each(__cb(_, __frame, 3, 0, function __$when() { 
                                 
                                 
-                                return _(null, r); }, true, false), _cdr(obj), function __1(_, item) { var __frame = { name: '__1', line: 1092 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { r = __1; _(); }, true, false), item, scope); }); }); } else { 
+                                return _(null, r); }, true, false), _cdr(obj), function __1(_, item) { var __frame = { name: '__1', line: 1090 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { r = __1; _(); }, true, false), item, scope); }); }); } else { 
                             
                             return _(null, []); } }(_); }, true, false), _car(obj), scope); }); }, while: function WHILE(_, obj, scope) { 
             
             
             
-            var r; var __frame = { name: 'WHILE', line: 1101 }; return __func(_, this, arguments, WHILE, 0, __frame, function __$WHILE() { r = []; 
+            var r; var __frame = { name: 'WHILE', line: 1099 }; return __func(_, this, arguments, WHILE, 0, __frame, function __$WHILE() { r = []; 
                 
                 return function ___(__break) { var __more; var __loop = __cb(_, __frame, 0, 0, function __$WHILE() { __more = false; return function __$WHILE(_) { return _interpret(__cb(_, __frame, 2, 0, function ___(__0, __3) { var __2 = !_is_nil(__3); return _(null, __2); }, true, false), _car(obj), scope); }(__cb(_, __frame, 2, 0, function ___(__0, __2) { if (__2) { 
-                                return _list_for_each(__cb(_, __frame, 3, 0, function __$WHILE() { while (__more) { __loop(); } __more = true; }, true, false), _cdr(obj), function __1(_, item) { var __frame = { name: '__1', line: 1104 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { 
+                                return _list_for_each(__cb(_, __frame, 3, 0, function __$WHILE() { while (__more) { __loop(); } __more = true; }, true, false), _cdr(obj), function __1(_, item) { var __frame = { name: '__1', line: 1102 }; return __func(_, this, arguments, __1, 0, __frame, function __$__1() { 
                                         return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { r = __1; _(); }, true, false), item, scope); }); }); } else { __break(); } }, true, false)); }); do { __loop(); } while (__more); __more = true; }(function __$WHILE() { 
                     
                     
                     return _(null, r); }); }); }, 'write-region': function write_region(_, obj, scope) { 
             
             
-            var start, end, fn, append; var __frame = { name: 'write_region', line: 1111 }; return __func(_, this, arguments, write_region, 0, __frame, function __$write_region() { 
+            var start, end, fn, append; var __frame = { name: 'write_region', line: 1109 }; return __func(_, this, arguments, write_region, 0, __frame, function __$write_region() { 
                 return _interpret(__cb(_, __frame, 1, 0, function ___(__0, __1) { start = __1; 
                     assert(typeof start === 'number'); 
                     return _interpret(__cb(_, __frame, 3, 0, function ___(__0, __2) { end = __2; 
@@ -1124,7 +1122,7 @@ var MELI = function () {
                                 return _(null, []); }, true, false), _cadr(_cddr(obj)), scope); }, true, false), _car(_cddr(obj)), scope); }, true, false), _cadr(obj), scope); }, true, false), _car(obj), scope); }); }, yow: function yow(_, obj, scope) { 
             
             
-            var __frame = { name: 'yow', line: 1127 }; return __func(_, this, arguments, yow, 0, __frame, function __$yow() { 
+            var __frame = { name: 'yow', line: 1125 }; return __func(_, this, arguments, yow, 0, __frame, function __$yow() { 
                 return _(null, { type: 'string', value: _string_to_array('Yow!!') }); }); } }; 
     
     
