@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-FILES="meli.js index.html dunnet.css dunnet.js dunnet.el"
+FILES="meli.js index.html dunnet.css dunnet.js dunnet.el cXVlc3Rpb25z d2Fsa3Rocm91Z2g="
 
 git checkout master
 make

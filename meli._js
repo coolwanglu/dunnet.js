@@ -317,17 +317,16 @@ function _interpret(_, obj, scope) {
   }
 }
 
-var _readline_callback = null;
-function _readline(callback) {
-  _readline_callback = function(s) {
-    _print(s+'\n');
-    callback(null, { type: 'string', value: _string_to_array(s) });
-  };
+var _readline = function _readline(callback) {
+  var line = window.prompt('') || '';
+  setTimeout(function() {
+    callback(line);
+  }, 1);
 };
 
 var _print = function _print(str) {
   console.log(str);
-}
+};
 
 var _default_buffer_name = '*scratch*';
 var Buffers = {};
@@ -965,7 +964,13 @@ var Functions = {
     assert(_is_nil(init));
     var keymap = _interpret(_, _car(_cddr(obj)), scope);      
     assert(keymap[0] === 'keymap');
-    return _readline(_);
+    var line = (function(callback) {
+      _readline(function(input) {
+        callback(null, input); // streamline interface
+      });
+    })(_);
+    _print(line + '\n');
+    return { type: 'string', value: _string_to_array(line) };
   },
 
   require: function require(_) { return []; },
@@ -1130,14 +1135,15 @@ var Functions = {
 return {
   eval: function eval(input, options) {
     options = options || {};
-    if(options.onprint) _print = options.onprint;
+    if(options.readline) _readline = options.readline;
+    if(options.print) _print = options.print;
     _interpret(function(ex, ret) {
       if(ex) {
         console.log('lisp stack:',Stack);
         console.log(ex.message);
         console.log(ex.stack);
-      } else if (options.onexit) {
-        options.onexit(ret);
+      } else if (options.exit) {
+        options.exit(ret);
       }
     }, new Parser(input).tokenize(), Global);
   },

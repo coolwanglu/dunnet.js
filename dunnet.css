@@ -45,13 +45,9 @@ kbd, button {
   line-height: 1.5;
 }
 
-#footer-left {
+.footer {
   position: fixed;
   left: 20px;
-  bottom: 15px;
-}
-#footer-right {
-  position: fixed;
   right: 20px;
   bottom: 15px;
 }
