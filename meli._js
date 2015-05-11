@@ -26,8 +26,6 @@ function assert(condition) {
   if(!condition) throw new Error('assertion failed');
 }
 
-function InterpreterError(message) { this.message = message; }
-
 function Parser (str) {
   this.s = 'progn\n' + str + '\n)';
   this.idx = 0;
@@ -555,10 +553,8 @@ var Functions = {
     try{
       r = _interpret(_, _cadr(obj), scope);
     } catch (ex) {
-      if(ex instanceof InterpreterError) {
-        console.log(ex.message);
-        r = _interpret(_, _cadr(_car(_cddr(obj))), scope);
-      } else throw ex;
+      console.log(ex.message);
+      r = _interpret(_, _cadr(_car(_cddr(obj))), scope);
     }
     return r;
   },
@@ -777,7 +773,7 @@ var Functions = {
         return [{ type: 'string', value: fn.value }, [data.length, []]];
       }
     }
-    throw new InterpreterError("Cannot find file: " + filename);
+    throw new Error("Cannot find file: " + filename);
   },
 
   interactive: function interactive(_) { return []; },
@@ -1007,9 +1003,11 @@ var Functions = {
   'string-match': function string_match(_, obj, scope) {
     var regexp = _interpret(_, _car(obj), scope);
     assert(regexp.type === 'string');
+    regexp = _array_to_string(regexp.value);
+    if(regexp === ')') regexp = '\\)'; // hack
     var s = _interpret(_, _cadr(obj), scope);
     assert(s.type === 'string');
-    var idx = _array_to_string(s.value).search(new RegExp(_array_to_string(regexp.value)));
+    var idx = _array_to_string(s.value).search(new RegExp(regexp));
     return (idx === -1) ? [] : idx;
   },
 
