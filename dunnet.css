@@ -1,4 +1,13 @@
 /* http://meta.superuser.com/questions/4788/css-for-the-new-kbd-style */
+a {
+  color: inherit;
+  margin-right: 10px;
+}
+
+a:not(:hover) {
+  text-decoration: none;
+}
+
 kbd, button {
   -moz-border-radius:3px;
   -moz-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
@@ -38,13 +47,13 @@ kbd, button {
 
 #footer-left {
   position: fixed;
-  left: 10px;
-  bottom: 10px;
+  left: 20px;
+  bottom: 15px;
 }
 #footer-right {
   position: fixed;
-  right: 10px;
-  bottom: 10px;
+  right: 20px;
+  bottom: 15px;
 }
 
 #input {
