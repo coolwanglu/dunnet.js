@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function(){
     input.focus();
     input.select();
   }
+  input.value = '';
   refocus();
   input.addEventListener('blur', function(e) {
     refocus();
