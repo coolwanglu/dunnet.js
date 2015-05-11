@@ -1,5 +1,5 @@
 /*
-Minimum emacs lisp interpreter 
+Minimal emacs lisp interpreter 
 Copyright (c) 2015 Lu Wang <coolwanglu@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
