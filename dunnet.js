@@ -9,10 +9,16 @@ document.addEventListener('DOMContentLoaded', function(){
     e.preventDefault();
     if(MELI.readline_callback(s)) input.value = '';
   });
-  input.focus();
-  input.addEventListener('blur', function(e) {
+  function refocus() {
     input.focus();
+    input.select();
+  }
+  refocus();
+  input.addEventListener('blur', function(e) {
+    refocus();
+    setTimeout(refocus, 1);
   });
+  document.addEventListener('mousemove', refocus);
 
   function send_to_terminal(str) {
     var lines = str.split('\n');
