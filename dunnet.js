@@ -9,7 +9,9 @@ document.addEventListener('DOMContentLoaded', function(){
     e.preventDefault();
     if(MELI.readline_callback(s)) input.value = '';
   });
+  var game_ended = false;
   function refocus() {
+    if(game_ended) return;
     input.focus();
     input.select();
   }
@@ -32,7 +34,11 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   function game_over() {
+    game_ended = true;
     main_content.classList.add('game-over');
+    setTimeout(function() {
+      document.getElementById('game-over').focus();
+    }, 1);
   }
 
   var xhr = new XMLHttpRequest();
