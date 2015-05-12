@@ -1,6 +1,6 @@
 # dunnet.js
 
-Ron's Emacs text adventure, on the Web
+Ron Schnell's Emacs text adventure, on the Web
 
 <pre>Dead end
 You are at a dead end of a dirt road. The road goes to the east.
