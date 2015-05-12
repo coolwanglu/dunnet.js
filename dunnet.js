@@ -52,12 +52,12 @@ document.addEventListener('DOMContentLoaded', function(){
     input_callback = callback;
   }
 
-  function get_auto_solver(walkthrough, answers){
+  function get_auto_solver(walkthrough, questions){
     walkthrough = atob(walkthrough).split(',');
-    var answer_table = {};
-    atob(answers).split('\n').forEach(function(s) {
+    var answers = {};
+    atob(questions).split('\n').forEach(function(s) {
       var l = s.split('" "');
-      if(l.length == 2) answer_table[l[0].substring(1).replace('\\n', '\n')] = l[1].substring(0, l[1].length-1);
+      if(l.length == 2) answers[l[0].substring(1).replace('\\n', '\n')] = l[1].substring(0, l[1].length-1);
     });
 
     var cmd_idx = 0;
@@ -82,8 +82,8 @@ document.addEventListener('DOMContentLoaded', function(){
           }
         } else if (find_egg) {
           if (str === 'There is a jewel-encrusted egg here.') egg_found = true;
-        } else if (str in answer_table) {
-          answer = answer_table[str];
+        } else if (str in answers) {
+          answer = answers[str];
         }
         send_to_terminal(str);
       },
