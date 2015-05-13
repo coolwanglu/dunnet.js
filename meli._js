@@ -1175,16 +1175,6 @@ return {
       }
     })(tokens, true);
     for(var k in missing) console.log('missing ',k);
-  },
-
-  readline_callback: function readline_callback(s) {
-    if(_readline_callback) {
-      var cb = _readline_callback;
-      _readline_callback = null;
-      cb(s);
-      return true;
-    }
-    return false;
   }
 };
 
